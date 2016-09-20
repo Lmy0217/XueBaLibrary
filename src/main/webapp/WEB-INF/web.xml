@@ -3,5 +3,65 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<display-name>Archetype Created Web Application</display-name>
+  
+	<!-- filter过滤器 -->
+
+
+
+	<!-- spring配置文件路径，如不配置需放到web-inf下 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+
+	<!-- 将HibernateSession开关控制配置在Filter，保证一个请求一个session，并对lazy提供支持 -->
+	<filter>
+		<filter-name>OpenSessionInView</filter-name>
+		<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+		<init-param>
+			<param-name>singleSession</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>OpenSessionInView</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- struts.xml路径配置，若不配置需放到类路径下 -->
+	<init-param>
+		<param-name>config</param-name>
+		<param-value>../../resources/struts.xml</param-value>
+	</init-param>
+
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置spring -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+   
+    <!-- 监听session创建和销毁 -->
+    <!-- <listener>
+        <listener-class>org.ncu.ky.listener.SessionListener</listener-class>
+    </listener> -->
+    
+    <!-- session超时失效时间  15分钟 -->
+	<session-config>
+		<session-timeout>20</session-timeout>
+	</session-config>
+     
 </web-app>

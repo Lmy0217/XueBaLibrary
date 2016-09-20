@@ -84,25 +84,19 @@
 			<version>4.2.4.RELEASE</version>
 		</dependency>
 
-		<!-- sqlservice驱动 -->
+		<!-- mysql驱动 -->
 		<dependency>
-			<groupId>com.hynnet</groupId>
-			<artifactId>sqljdbc4-chs</artifactId>
-			<version>4.0.2206.100</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.4</version>
 		</dependency>
-		<!-- c3p0数据源 -->
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
-		</dependency>
-
-
+		<!-- dbcp数据源 -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+		
 
 		<!-- 添加Log4J依赖 -->
 		<dependency>
