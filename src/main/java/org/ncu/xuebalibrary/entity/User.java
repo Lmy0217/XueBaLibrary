@@ -31,6 +31,10 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
+	/** ÃÜÂë×´Ì¬ */
+	@Column(name = "password_status", columnDefinition = Strings.TYPE_VARCHAR + Strings.DEFAULT + Strings.QUOTE + Strings.STATUS_NORMAL + Strings.QUOTE)
+	private String password_status;
+	
 	/** ÑÎ */
 	@Column(name = "salt")
 	private String salt;
@@ -113,6 +117,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getPassword_status() {
+		return password_status;
+	}
+
+	public void setPassword_status(String password_status) {
+		this.password_status = password_status;
 	}
 
 	public String getSalt() {

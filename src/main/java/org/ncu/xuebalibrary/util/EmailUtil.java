@@ -36,7 +36,7 @@ public class EmailUtil {
 		return session;
 	}
 	
-	public static boolean send(String toEmail, String content) {
+	public static boolean send(String toEmail, String subject, String content) {
 		
 		boolean flag = true;
 		Session session = getSession();
@@ -51,7 +51,7 @@ public class EmailUtil {
 			msg.setSentDate(new Date());
 			
 			System.setProperty("mail.mime.charset","utf-8");
-			msg.setSubject("=?utf-8?B?5a2m6Zy45paH5bqT6LSm5Y+35r+A5rS76YKu5Lu277yM6K+35ZyoMjTlsI/ml7blhoXngrnlh7vpk77mjqXmv4DmtLvmgqjnmoTotKblj7c=?=");
+			msg.setSubject("=?utf-8?B?" + subject + "?=");
 			msg.setContent("<a href=\"" + Strings.URL + content + "\">" + Strings.URL + content + "</a>", "text/html;charset=utf-8");
 			//msg.setHeader("Content-Transfer-Encoding", "base64");
 			

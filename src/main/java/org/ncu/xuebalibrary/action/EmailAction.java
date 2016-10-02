@@ -20,7 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 @ParentPackage("json-default")
 @Action(value = "email", results = {
 		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "login", location = "/login.html")
+		@Result(name = "login", type = "redirect", location = "/login.html")
 })
 public class EmailAction extends ActionSupport {
 
@@ -83,6 +83,7 @@ public class EmailAction extends ActionSupport {
 		if(type == null) {
 			info.add(Strings.FAIL_0014);
 		} else if(type.equals(Strings.TYPE_SEND_ACTIVITE)) {
+			
 			Object obj_id = session.getAttribute("id");
 			if(obj_id == null) {
 				info.add(Strings.FAIL_0019);
@@ -94,13 +95,17 @@ public class EmailAction extends ActionSupport {
 			map.put("id", "" + (Long)obj_id);
 			flag = userService.sendActivateEmail(map, info);
 			
-			if(flag) {
-				session.setAttribute("status", Strings.STATUS_NORMAL);
-			}
-		} else if(type.equals(Strings.TYPE_ACTIVITE) && id > 0 && key != null && key.length() > 0) {
+		} else if(type.equals(Strings.TYPE_ACTIVITE)) {
+			
 			flag = userService.activateEmail(id, key, info);
-		} else if(type.equals(Strings.TYPE_SEND_PASSWORD) && id > 0) {
-			info.add(Strings.FAIL_0018);
+			
+			if(flag) {
+				Object obj_id = session.getAttribute("id");
+				if(obj_id != null && id == (Long)obj_id) {
+					session.setAttribute("status", Strings.STATUS_NORMAL);
+				}
+			}
+			
 		} else {
 			info.add(Strings.FAIL_0014);
 		}

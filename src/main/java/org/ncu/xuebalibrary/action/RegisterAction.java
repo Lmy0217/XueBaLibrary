@@ -18,9 +18,9 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "register", results = {
-		@Result(name = "login", location = "/login.html"),
+		@Result(name = "login", type = "redirect", location = "/login.html"),
 		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "index", location = "/index.html")
+		@Result(name = "index", type = "redirect", location = "/index.html")
 })
 public class RegisterAction extends ActionSupport {
 
@@ -100,12 +100,10 @@ public class RegisterAction extends ActionSupport {
 		}
 		
 		if(flag) {
-			
-		} else {
-			
+			return "login";
 		}
 		
 		setResult(info.get(0));
-		return flag ? "login" : "result";
+		return "result";
 	}
 }

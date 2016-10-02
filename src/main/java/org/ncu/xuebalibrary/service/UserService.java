@@ -64,14 +64,14 @@ public class UserService {
 	
 	public User login(String username, String password, List<String> info) {
 		
-		if(username == null || password == null || !checkUsername(username) || !checkPassword(password)) {
+		if(username == null || password == null || (!checkUsername(username) && !checkEmail(username) && !checkMobile(username)) || !checkPassword(password)) {
 			if(info != null) info.add(Strings.FAIL_0001);
 			return null;
 		}
 		
 		User user = userDAO.loginSelect(username);
 		if(user == null) {
-			if(info != null) info.add(Strings.FAIL_0005);
+			if(info != null) info.add(Strings.FAIL_0008);
 			return null;
 		}
 		
@@ -138,14 +138,146 @@ public class UserService {
 		return result;
 	}
 	
-	public boolean forgetPassword(String username) {
+	public boolean sendResetPasswordEmail(String username, List<String> info) {
 		
-		return false;
+		if(username == null || (!checkUsername(username) && !checkEmail(username) && !checkMobile(username))) {
+			if(info != null) info.add(Strings.FAIL_0005);
+			return false;
+		}
+		
+		User user = userDAO.loginSelect(username);
+		if(user == null) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		
+		if(!user.getEmail_status().equals(Strings.STATUS_ACTIVITED)) {
+			if(info != null) info.add(Strings.FAIL_0020);
+			return false;
+		}
+		
+		String email = user.getEmail();
+		if(!checkEmail(email)) {
+			if(info != null) info.add(Strings.FAIL_0002);
+			return false;
+		}
+		
+		String random = StringUtil.string2Hex(SecurityUtil.saltGenerate());
+		String time = "" + (System.currentTimeMillis() + Strings.PASSWORD_OVERTIME);
+		String key = random + "," + time;
+		String param = StringUtil.string2Hex(SecurityUtil.sha(key));
+		if(random == null || param == null) {
+			if(info != null) info.add(Strings.FAIL_0011);
+			return false;
+		}
+		
+		param = "password.action?type=" + Strings.TYPE_FORGET + "&id=" + user.getId() + "&key=" + param;
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		newMap.put("password_status", key);
+		HashMap<String, String> findMap = new HashMap<String, String>();
+		findMap.put("id", "" + user.getId());
+		if(userDAO.update(newMap, null, findMap) != 1) {
+			if(info != null) info.add(Strings.FAIL_0012);
+			return false;
+		}
+		
+		if(!EmailUtil.send(email, Strings.EMAIL_SUBJECT_PASSWORD, param)) {
+			if(info != null) info.add(Strings.FAIL_0013);
+			return false;
+		}
+		
+		if(info != null) info.add(Strings.SUCCESS_0006);
+		return true;
 	}
 	
-	public boolean updateForgetPassword() {
+	public boolean resetPasswordByEmail(long id, String key, List<String> info) {
 		
-		return false;
+		if(id <= 0 || key == null || key.length() == 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", "" + id);
+		List<User> list = userDAO.select(map, null, null);
+		if(list == null || list.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		
+		User user = list.get(0);
+		if(user.getPassword_status().equals(Strings.STATUS_NORMAL) || user.getPassword_status().equals(Strings.STATUS_RESET)) {
+			if(info != null) info.add(Strings.FAIL_0021);
+			return false;
+		}
+		
+		if(Long.parseLong(user.getPassword_status().split(",")[1]) < System.currentTimeMillis()) {
+			if(info != null) info.add(Strings.FAIL_0022);
+			return false;
+		}
+		
+		if(!SecurityUtil.slowEquals(StringUtil.hex2Byte(key), StringUtil.string2Byte(SecurityUtil.sha(user.getPassword_status())))) {
+			if(info != null) info.add(Strings.FAIL_0016);
+			return false;
+		}
+		
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		String time = "" + (System.currentTimeMillis() + Strings.RESET_OVERTIME);
+		newMap.put("password_status", Strings.STATUS_RESET + "," + time);
+		HashMap<String, String> findMap = new HashMap<String, String>();
+		findMap.put("id", "" + id);
+		
+		boolean result = userDAO.update(newMap, null, findMap) == 1;
+		if(result) {
+			if(info != null) info.add(Strings.SUCCESS_0007);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0023);
+		}
+		return result;
+	}
+	
+	public boolean resetPassword(long id, String newPassword, List<String> info) {
+		
+		if(id <= 0 || newPassword == null || !checkPassword(newPassword)) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", "" + id);
+		List<User> list = userDAO.select(map, null, null);
+		if(list == null || list.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		
+		User user = list.get(0);
+		String password_status = user.getPassword_status();
+		if(!password_status.split(",")[0].equals(Strings.STATUS_RESET)) {
+			if(info != null) info.add(Strings.FAIL_0025);
+			return false;
+		}
+		
+		if(Long.parseLong(password_status.split(",")[1]) < System.currentTimeMillis()) {
+			if(info != null) info.add(Strings.FAIL_0022);
+			return false;
+		}
+		
+		String salt = SecurityUtil.saltGenerate();
+		newPassword = SecurityUtil.encrypt(newPassword, salt);
+		
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		newMap.put("password", StringUtil.string2Hex(newPassword));
+		newMap.put("salt", StringUtil.string2Hex(salt));
+		newMap.put("password_status", Strings.STATUS_NORMAL);
+		
+		boolean result = userDAO.update(newMap, null, map) == 1;
+		if(result) {
+			if(info != null) info.add(Strings.SUCCESS_0008);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0026);
+		}
+		return result;
 	}
 	
 	public boolean sendActivateEmail(HashMap<String, String> map, List<String> info) {
@@ -192,7 +324,7 @@ public class UserService {
 			return false;
 		}
 		
-		if(!EmailUtil.send(email, param)) {
+		if(!EmailUtil.send(email, Strings.EMAIL_SUBJECT_ACTIVITE, param)) {
 			if(info != null) info.add(Strings.FAIL_0013);
 			return false;
 		}

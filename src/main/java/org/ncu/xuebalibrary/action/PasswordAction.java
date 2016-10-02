@@ -11,6 +11,7 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.ncu.xuebalibrary.config.Strings;
+import org.ncu.xuebalibrary.listener.SessionListener;
 import org.ncu.xuebalibrary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +20,8 @@ import com.opensymphony.xwork2.ActionSupport;
 @ParentPackage("json-default")
 @Action(value = "password", results = {
 		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "login", location = "/login.html")
+		@Result(name = "login", type = "redirect", location = "/login.html"),
+		@Result(name = "index", type = "redirect", location = "/index.html")
 })
 public class PasswordAction extends ActionSupport {
 
@@ -31,6 +33,9 @@ public class PasswordAction extends ActionSupport {
 	private String type;
 	private String password;
 	private String newpassword;
+	private String username;
+	private long id;
+	private String key;
 	
 	private String result;
 	
@@ -62,6 +67,30 @@ public class PasswordAction extends ActionSupport {
 	public void setNewpassword(String newpassword) {
 		this.newpassword = newpassword;
 	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 
 	public String getResult() {
 		return result;
@@ -76,11 +105,13 @@ public class PasswordAction extends ActionSupport {
 		request = ServletActionContext.getRequest();
 		session = request.getSession();
 		
+		boolean flag = false;
 		info = new ArrayList<String>();
 		
 		if(type == null) {
 			info.add(Strings.FAIL_0014);
 		} else if(type.equals(Strings.TYPE_PASSWORD)) {
+			
 			Object obj_id = session.getAttribute("id");
 			if(obj_id == null) {
 				info.add(Strings.FAIL_0019);
@@ -96,8 +127,42 @@ public class PasswordAction extends ActionSupport {
 			}
 			
 			userService.updatePassword((Long)obj_id, password, newpassword, info);
+			
+		} else if(type.equals(Strings.TYPE_SEND_PASSWORD)) {
+			
+			if(session.getAttribute("id") != null) return "index";
+			
+			userService.sendResetPasswordEmail(username, info);
+			
 		} else if(type.equals(Strings.TYPE_FORGET)) {
-			info.add(Strings.FAIL_0018);
+			
+			if(session.getAttribute("id") != null) {
+				info.add(Strings.FAIL_0024);
+				setResult(info.get(0));
+				return "result";
+			}
+			
+			flag = userService.resetPasswordByEmail(id, key, info);
+			if(flag) {
+				session.setAttribute("id", id);
+				SessionListener.add(session);
+			}
+			
+		} else if(type.equals(Strings.TYPE_RESET)){
+			
+			Object obj_id = session.getAttribute("id");
+			if(obj_id == null) {
+				info.add(Strings.FAIL_0026);
+				setResult(info.get(0));
+				return "result";
+			}
+			
+			flag = userService.resetPassword((Long)obj_id, newpassword, info);
+			if(flag) {
+				SessionListener.remove(session);
+				//TODO
+			}
+			
 		} else {
 			info.add(Strings.FAIL_0014);
 		}

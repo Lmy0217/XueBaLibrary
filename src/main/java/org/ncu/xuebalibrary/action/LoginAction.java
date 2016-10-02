@@ -10,8 +10,8 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.entity.User;
+import org.ncu.xuebalibrary.listener.SessionListener;
 import org.ncu.xuebalibrary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +19,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "login", results = {
-		@Result(name = "index", location = "/index.html"),
+		@Result(name = "index", type = "redirect", location = "/index.html"),
 		@Result(name = "result", type = "json", params = { "root", "result" }),
 })
 public class LoginAction extends ActionSupport {
@@ -73,22 +73,18 @@ public class LoginAction extends ActionSupport {
 		User user = null;
 		info = new ArrayList<String>();
 		
-		if(username != null && password != null && (userService.checkUsername(username) || userService.checkEmail(username) || userService.checkMobile(username)) && userService.checkPassword(password)) {
-			user = userService.login(username, password, info);
-		} else {
-			info.add(Strings.FAIL_0014);
-		}
+		user = userService.login(username, password, info);
 		
 		if(user != null) {
 			session.setAttribute("id", user.getId());
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("role", user.getRole());
 			session.setAttribute("status", user.getStatus());
-		} else {
-			
+			SessionListener.add(session);
+			return "index";
 		}
 		
 		setResult(info.get(0));
-		return user != null ? "index" : "result";
+		return "result";
 	}
 }
