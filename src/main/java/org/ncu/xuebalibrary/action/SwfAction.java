@@ -74,7 +74,10 @@ public class SwfAction extends ActionSupport {
 		Object obj_id = session.getAttribute("id");
 		
 		FileInputStream fileInputStream = documentService.show(obj_id == null ? 0 : (Long)obj_id, documentid, info);
-		if(fileInputStream == null) return "result";
+		if(fileInputStream == null) {
+			setResult(info.get(0));
+			return "result";
+		}
 		
 		setSwf(fileInputStream);
 		return "swf";

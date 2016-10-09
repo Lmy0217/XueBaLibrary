@@ -114,7 +114,7 @@ public class FileUtil {
 		int index = filename.lastIndexOf(".");
 		if(index == -1) return null;
 		
-		String suffix = filename.substring(index);
+		String suffix = filename.substring(index).toLowerCase();
 		if(!AllowedTypes.containsValue(suffix)) return null;
 		
 		return suffix;
