@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>论坛</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/forum.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- 导航 -->
+    <nav class="forum_head_nav">
+        <div class="aw-logo"><a href="index.html">学霸文库</a></div>
+        <div class="aw-search-box  ">
+            <input class="form-control search-query" type="text" placeholder="搜索问题">
+            <span title="搜索" id="global_search_btns">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+            <!-- <i class="icon icon-search"></i> -->
+        </div>
+        <div class="forum-login">
+            <a href="login.html" class="btn btn-primary">登录</a>
+            <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="clear"></div>
+    </nav>
+    <!-- end 导航 -->
+    <div class="container con_wrap">
+        <div class="aw-container-wrap">
+            <div class="row">
+                <div class="aw-content-wrap ">
+                    <!-- 侧边栏 -->
+                    <div class="col-sm-8  aw-main-content">
+                        <div class="aw-main-bar">
+                            <div class="aw-nav-find">
+                                <a href="#" class="active"><span><i class="glyphicon glyphicon-th-list"></i>发现</span></a>
+                            </div>
+                            <div class="aw-nav-tabs">
+                                <ul class="nav nav-tabs  ">
+                                    <li><a href="#">热门</a></li>
+                                    <li><a href="#">推荐</a></li>
+                                    <li><a href="#">最新</a></li>
+                                </ul>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <!-- 文章列表 -->
+                        <div class="aw-explore-list">
+                            <div class="aw-commit-list row">
+                                <div class="list-image col-sm-1">
+                                    <img src="images/logo.jpg" width="50px" height="50px">
+                                </div>
+                                <div class="list-content col-sm-9">
+                                    <h5><a href="#">中文完整版是集成了邮件服务吗？</a></h5>
+                                    <span><i>2</i>人关注•<i>3</i>个回复•<i>200</i>次浏览</span>
+                                </div>
+                                <div class="list-replay col-sm-2">
+                                    <a href="#">回复</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aw-explore-list">
+                            <div class="aw-commit-list row">
+                                <div class="list-image col-sm-1">
+                                    <img src="images/logo.jpg" width="50px" height="50px">
+                                </div>
+                                <div class="list-content col-sm-9">
+                                    <h5><a href="#">中文完整版是集成了邮件服务吗？</a></h5>
+                                    <span><i>2</i>人关注•<i>3</i>个回复•<i>200</i>次浏览</span>
+                                </div>
+                                <div class="list-replay col-sm-2">
+                                    <a href="#">回复</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end文章列表 -->
+                        <!-- 分页 -->
+                        <nav>
+                            <ul class="pager">
+                                <li><a href="#">上一页</a></li>
+                                <li><a href="#">下一页</a></li>
+                            </ul>
+                        </nav>
+                        <!-- end分页 -->
+                        <div class="aw-ask">
+                            <div class="aw-nav-ask">
+                                <span><i class="glyphicon glyphicon-th-list"></i>提问</span>
+                            </div>
+                            <div class="aw-ask-text">
+                            <input type="text"  value="" placeholder="问题" class="form-control">
+                                <textarea class="form-control" rows="4" placeholder="描述问题"></textarea>
+                                <button type="button" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                        <!-- 提问 -->
+                        <!-- end提问 -->
+                    </div>
+                    <!-- end侧边栏 -->
+                    <!-- 右边栏 -->
+                    <div class="col-sm-3 aw-main-right">
+                        <div class="hot-tip row">
+                            <div class="col-sm-7">
+                                <h3>热门话题</h3>
+                            </div>
+                            <div class="col-sm-4 tip-more">
+                                <h5><a href="#" title="">更多>></a></h5>
+                            </div>
+                        </div>
+                        <div class="hot-tip-list">
+                            <div class="hot-tip-list-li row">
+                                <a href="#" title="">
+                                    <div class="li-img col-xs-2"><img src="images/logo.jpg" width="40px" height="40px"></div>
+                                    <div class="li-centent col-xs-10">
+                                        <span title="中文完整版是集成了邮件服务吗？">中文完整版是集成了邮件服务吗</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end右边栏 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start  footer-->
+    <footer class="footer">
+        <div>
+            <span>南昌大学版权所有@</span>
+        </div>
+    </footer>
+    <!-- end footer -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
