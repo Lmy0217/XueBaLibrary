@@ -55,9 +55,9 @@
 	</listener>
    
     <!-- 监听session创建和销毁 -->
-    <!-- <listener>
-        <listener-class>org.ncu.ky.listener.SessionListener</listener-class>
-    </listener> -->
+    <listener>
+        <listener-class>org.ncu.xuebalibrary.listener.SessionListener</listener-class>
+    </listener>
     
     <!-- session超时失效时间  15分钟 -->
 	<session-config>

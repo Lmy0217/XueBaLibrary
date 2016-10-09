@@ -10,28 +10,19 @@
 		<!-- 2. 关联的 .hbm.xml 也在 IOC 容器配置 SessionFactory 实例时再进行配置 -->
 		<!-- 3. 配置 hibernate 的基本属性: 方言, SQL 显示及格式化, 生成数据表的策略以及二级缓存等. -->
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.format_sql">false</property>
-		<property name="hibernate.hbm2ddl.auto">create</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="current_session_context_class">thread</property>
 
 		<!-- 配置 hibernate 二级缓存相关的属性. -->
 
 		<!-- mapping -->
+		<mapping class="org.ncu.xuebalibrary.entity.Category" />
+		<mapping class="org.ncu.xuebalibrary.entity.Comment" />
+		<mapping class="org.ncu.xuebalibrary.entity.Content" />
+		<mapping class="org.ncu.xuebalibrary.entity.Document" />
 		<mapping class="org.ncu.xuebalibrary.entity.User" />
-		<!-- <mapping class="org.ncu.ky.bean.Test" />
-		<mapping class="org.ncu.ky.bean.Award" />
-		<mapping class="org.ncu.ky.bean.AwardOwner" />
-		<mapping class="org.ncu.ky.bean.HorizontalProject" />
-		<mapping class="org.ncu.ky.bean.HorizontalProjectMember" />
-		<mapping class="org.ncu.ky.bean.Paper" />
-		<mapping class="org.ncu.ky.bean.PaperAuthor" />
-		<mapping class="org.ncu.ky.bean.Patent" />
-		<mapping class="org.ncu.ky.bean.PatentOwner" />
-		<mapping class="org.ncu.ky.bean.Power" />
-		<mapping class="org.ncu.ky.bean.State" />
-		<mapping class="org.ncu.ky.bean.User" />
-		<mapping class="org.ncu.ky.bean.VerticalProject" />
-		<mapping class="org.ncu.ky.bean.VerticalProjectMember" /> -->
 		
 	</session-factory>
 </hibernate-configuration>
