@@ -20,7 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 @ParentPackage("json-default")
 @Action(value = "login", results = {
 		@Result(name = "index", type = "redirect", location = "/index.html"),
-		@Result(name = "result", type = "json", params = { "root", "result" }),
+		@Result(name = "result", type = "json", params = { "root", "result" })
 })
 public class LoginAction extends ActionSupport {
 

@@ -35,6 +35,10 @@ public class Document {
 	@Column(name = "path", unique = true, nullable = false)
 	private String path;
 	
+	/** 文档散列值 */
+	@Column(name = "hash", unique = true)
+	private String hash;
+	
 	/** 文档后缀 */
 	@Column(name = "suffix", nullable = false)
 	private String suffix;
@@ -56,7 +60,7 @@ public class Document {
 	private String status;
 	
 	/** 排序编号 */
-	@Column(name = "order_number")
+	@Column(name = "order_number", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long order_number;
 	
 	/** 支持人数 */
@@ -72,7 +76,7 @@ public class Document {
 	private long view_count;
 	
 	/** 评分 */
-	@Column(name = "rate")
+	@Column(name = "rate", columnDefinition = Strings.TYPE_INT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private int rate;
 	
 	/** 评分次数 */

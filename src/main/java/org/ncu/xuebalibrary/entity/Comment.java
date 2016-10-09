@@ -36,7 +36,7 @@ public class Comment {
 	private long parent_id;
 	
 	/** 回复的用户ID */
-	@Column(name = "parent_user_id")
+	@Column(name = "parent_user_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long parent_user_id;
 	
 	/** 排序编号 */

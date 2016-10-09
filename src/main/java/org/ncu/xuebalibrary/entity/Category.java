@@ -48,7 +48,7 @@ public class Category {
 	private String status;
 	
 	/** ÅÅÐò±àºÅ */
-	@Column(name = "order_number")
+	@Column(name = "order_number", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long order_number;
 	
 	/** SEO¹Ø¼ü×Ö */

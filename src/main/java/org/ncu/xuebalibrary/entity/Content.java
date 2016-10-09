@@ -44,7 +44,7 @@ public class Content {
 	private String status;
 	
 	/** 排序编号 */
-	@Column(name = "order_number")
+	@Column(name = "order_number", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long order_number;
 	
 	/** 访问量 */
@@ -60,7 +60,7 @@ public class Content {
 	private Date comment_time;
 	
 	/** 最后评论用户ID */
-	@Column(name = "comment_user_id")
+	@Column(name = "comment_user_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long comment_user_id;
 	
 	/** 创建日期 */

@@ -27,4 +27,22 @@ public class UserDAO extends BaseDAO<User, Long> {
 		
 		return list != null && list.size() == 0;
 	}
+	
+	public boolean checkId(long id) {
+		
+		if(id <= 0) return false;
+		
+		String sql = "select * from user where id = '" + id + "'";
+		List<User> list = queryBySQL(sql);
+		
+		return list != null && list.size() == 1;
+	}
+	
+	public boolean addDocument(long number) {
+		
+		if(number <= 0) return false;
+		
+		String sql = "update user set document_count = document_count + '" + number + "'";
+		return excuteBySQL(sql) == 1;
+	}
 }

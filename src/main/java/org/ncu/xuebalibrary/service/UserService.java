@@ -157,13 +157,13 @@ public class UserService {
 		}
 		
 		String email = user.getEmail();
-		if(!checkEmail(email)) {
+		if(email == null || !checkEmail(email)) {
 			if(info != null) info.add(Strings.FAIL_0002);
 			return false;
 		}
 		
 		String random = StringUtil.string2Hex(SecurityUtil.saltGenerate());
-		String time = "" + (System.currentTimeMillis() + Strings.PASSWORD_OVERTIME);
+		String time = "" + (System.currentTimeMillis() + Strings.OVERTIME_PASSWORD);
 		String key = random + "," + time;
 		String param = StringUtil.string2Hex(SecurityUtil.sha(key));
 		if(random == null || param == null) {
@@ -222,7 +222,7 @@ public class UserService {
 		}
 		
 		HashMap<String, String> newMap = new HashMap<String, String>();
-		String time = "" + (System.currentTimeMillis() + Strings.RESET_OVERTIME);
+		String time = "" + (System.currentTimeMillis() + Strings.OVERTIME_RESET);
 		newMap.put("password_status", Strings.STATUS_RESET + "," + time);
 		HashMap<String, String> findMap = new HashMap<String, String>();
 		findMap.put("id", "" + id);
@@ -258,6 +258,7 @@ public class UserService {
 			return false;
 		}
 		
+		//TODO password_status
 		if(Long.parseLong(password_status.split(",")[1]) < System.currentTimeMillis()) {
 			if(info != null) info.add(Strings.FAIL_0022);
 			return false;

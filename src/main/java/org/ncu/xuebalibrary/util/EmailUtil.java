@@ -52,7 +52,7 @@ public class EmailUtil {
 			
 			System.setProperty("mail.mime.charset","utf-8");
 			msg.setSubject("=?utf-8?B?" + subject + "?=");
-			msg.setContent("<a href=\"" + Strings.URL + content + "\">" + Strings.URL + content + "</a>", "text/html;charset=utf-8");
+			msg.setContent("<a href=\"" + Strings.PROJECT_URL + content + "\">" + Strings.PROJECT_URL + content + "</a>", "text/html;charset=utf-8");
 			//msg.setHeader("Content-Transfer-Encoding", "base64");
 			
 			Transport.send(msg);

@@ -159,7 +159,7 @@ public class PasswordAction extends ActionSupport {
 			
 			flag = userService.resetPassword((Long)obj_id, newpassword, info);
 			if(flag) {
-				SessionListener.remove(session);
+				session.invalidate();
 				//TODO
 			}
 			

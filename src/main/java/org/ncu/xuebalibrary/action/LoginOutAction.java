@@ -7,7 +7,6 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
-import org.ncu.xuebalibrary.listener.SessionListener;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -27,7 +26,7 @@ public class LoginOutAction extends ActionSupport {
 		request = ServletActionContext.getRequest();
 		session = request.getSession();
 		
-		SessionListener.remove(session);
+		session.invalidate();
 		
 		return "login";
 	}

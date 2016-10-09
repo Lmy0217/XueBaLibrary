@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.ncu.xuebalibrary.util.FileUtil;
+
 public class SessionListener implements HttpSessionListener {
 	
 	private static HashMap<Long, HttpSession> userSession = new HashMap<Long, HttpSession>();
@@ -16,6 +18,13 @@ public class SessionListener implements HttpSessionListener {
 
 	public void sessionDestroyed(HttpSessionEvent arg0) {
 
+		HttpSession session = arg0.getSession();
+		if(session == null) return;
+		
+		Object obj_upload = session.getAttribute("upload");
+		if(obj_upload != null && ((String)obj_upload).length() > 0) FileUtil.deleteDocFile(this, (String)obj_upload);
+		
+		remove(session);
 	}
 
 	public static boolean add(HttpSession session) {
@@ -32,13 +41,12 @@ public class SessionListener implements HttpSessionListener {
 		return true;
 	}
 	
-	public static boolean remove(HttpSession session) {
+	private static boolean remove(HttpSession session) {
 		
 		if(session == null) return false;
 		
 		Object obj_id = session.getAttribute("id");
 		if(obj_id != null) userSession.remove((Long)obj_id);
-		session.invalidate();
 		
 		return true;
 	}
