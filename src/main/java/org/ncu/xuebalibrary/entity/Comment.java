@@ -41,7 +41,7 @@ public class Comment {
 	private long grandparent_id;
 	
 	/** ÅÅÐò±àºÅ */
-	@Column(name = "order_number", nullable = false)
+	@Column(name = "order_number", nullable = false, columnDefinition = Strings.TYPE_TEXT)
 	private String order_number;
 	
 	/** »Ø¸´ÊýÁ¿ */
