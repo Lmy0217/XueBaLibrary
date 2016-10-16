@@ -38,11 +38,35 @@ public class UserDAO extends BaseDAO<User, Long> {
 		return list != null && list.size() == 1;
 	}
 	
-	public boolean addDocument(long number) {
+	public boolean addDocument(long id, long number) {
 		
-		if(number <= 0) return false;
+		if(id <= 0 || number <= 0) return false;
 		
-		String sql = "update user set document_count = document_count + '" + number + "'";
+		String sql = "update user set document_count = document_count + '" + number + "' where id = '" + id + "'";
+		return excuteBySQL(sql) == 1;
+	}
+	
+	public boolean addContent(long id, long number) {
+		
+		if(id <= 0 || number <= 0) return false;
+		
+		String sql = "update user set content_count = content_count + '" + number + "' where id = '" + id + "'";
+		return excuteBySQL(sql) == 1;
+	}
+	
+	public boolean addComment(long id, long number) {
+		
+		if(id <= 0 || number <= 0) return false;
+		
+		String sql = "update user set comment_count = comment_count + '" + number + "' where id = '" + id + "'";
+		return excuteBySQL(sql) == 1;
+	}
+	
+	public boolean addPoint(long id, long number) {
+		
+		if(id <= 0 || number <= 0) return false;
+		
+		String sql = "update user set point = point + '" + number + "' where id = '" + id + "'";
 		return excuteBySQL(sql) == 1;
 	}
 }

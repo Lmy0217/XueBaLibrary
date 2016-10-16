@@ -88,6 +88,23 @@ public class FileUtil {
 		return true;
 	}
 	
+	public static boolean deleteSwfFile(Object obj, String filename) {
+		
+		if(obj == null || filename == null || filename.length() == 0) return false;
+		
+		try {
+			File parent = getSwfDirectory(obj);
+			if(parent == null) throw new Exception(Strings.FAIL_0027);//TODO
+			File file = new File(parent, filename);
+			if(!file.delete()) file.deleteOnExit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public static String getDocname(long userId) {
 		
 		if(userId <= 0) return null;

@@ -24,11 +24,11 @@ public class Document {
 	private long id;
 	
 	/** 标题 */
-	@Column(name = "title", nullable = false)
+	@Column(name = "title", nullable = false, columnDefinition = Strings.TYPE_TEXT)
 	private String title;
 	
 	/** 介绍 */
-	@Column(name = "summary")
+	@Column(name = "summary", columnDefinition = Strings.TYPE_TEXT)
 	private String summary;
 	
 	/** 存储路径 */
@@ -44,7 +44,7 @@ public class Document {
 	private String suffix;
 	
 	/** 类别ID */
-	@Column(name = "category_id", nullable = false)
+	@Column(name = "category_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long category_id;
 	
 	/** 用户ID */

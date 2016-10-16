@@ -80,6 +80,15 @@ public class EmailAction extends ActionSupport {
 		boolean flag = false;
 		info = new ArrayList<String>();
 		
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
 		if(type == null) {
 			info.add(Strings.FAIL_0014);
 		} else if(type.equals(Strings.TYPE_SEND_ACTIVITE)) {
@@ -90,6 +99,15 @@ public class EmailAction extends ActionSupport {
 				setResult(info.get(0));
 				return "login";
 			}
+			
+			long activiteemailtime = System.currentTimeMillis();
+			Object obj_activiteemailtime = session.getAttribute("activiteemailtime");
+			if(obj_activiteemailtime != null && activiteemailtime - (Long)obj_activiteemailtime <= Strings.EMAIL_SPACE){
+				info.add(Strings.FAIL_0064);
+				setResult(info.get(0));
+				return "result";
+			}
+			session.setAttribute("activiteemailtime", activiteemailtime);
 			
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("id", "" + (Long)obj_id);

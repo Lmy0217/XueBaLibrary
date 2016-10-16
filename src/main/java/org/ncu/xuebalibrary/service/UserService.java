@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.ncu.xuebalibrary.config.Strings;
+import org.ncu.xuebalibrary.dao.CommentDAO;
+import org.ncu.xuebalibrary.dao.ContentDAO;
+import org.ncu.xuebalibrary.dao.DocumentDAO;
 import org.ncu.xuebalibrary.dao.UserDAO;
 import org.ncu.xuebalibrary.entity.User;
 import org.ncu.xuebalibrary.util.EmailUtil;
@@ -19,6 +22,12 @@ public class UserService {
 
 	@Autowired
 	private UserDAO userDAO;
+	@Autowired
+	private DocumentDAO documentDAO;
+	@Autowired
+	private ContentDAO contentDAO;
+	@Autowired
+	private CommentDAO commentDAO;
 	
 	public boolean registerByEmail(String username, String password, String email, List<String> info) {
 		
@@ -45,6 +54,7 @@ public class UserService {
 		map.put("password", StringUtil.string2Hex(password));
 		map.put("salt", StringUtil.string2Hex(salt));
 		map.put("email_status", email);
+		map.put("point", "" + Strings.REGISTER_POINT);
 		map.put("created", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date()));
 		
 		boolean flag = userDAO.insert(map) == 1;
@@ -382,6 +392,202 @@ public class UserService {
 		return result;
 	}
 	
+	//TODO test
+	public boolean delete(long userid, long id, List<String> info) {
+		
+		if(id <= 0 || userid <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + id);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		User user1 = list1.get(0);
+		
+		HashMap<String, String> map2 = new HashMap<String, String>();
+		map2.put("id", "" + userid);
+		List<User> list2 = userDAO.select(map1, null, null);
+		if(list2 == null || list2.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		User user2 = list1.get(0);
+		
+		if(!(user1.getRole().equals(Strings.ROLE_OPERATOR) && user2.getRole().equals(Strings.ROLE_ADMINISTRATOR)) 
+				&& !(user1.getRole().equals(Strings.ROLE_VISITOR) && user2.getRole().equals(Strings.ROLE_OPERATOR))
+				&& !(user1.getRole().equals(Strings.ROLE_VISITOR) && user2.getRole().equals(Strings.ROLE_ADMINISTRATOR))) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		
+		boolean flag = userDAO.delete(map1) == 1;
+		if(flag) {
+			HashMap<String, String> newMap1 = new HashMap<String, String>();
+			newMap1.put("user_id", "0");
+			HashMap<String, String> findMap1 = new HashMap<String, String>();
+			findMap1.put("user_id", "" + id);
+			documentDAO.update(newMap1, null, findMap1);
+			contentDAO.update(newMap1, null, findMap1);
+			commentDAO.update(newMap1, null, findMap1);
+			
+			HashMap<String, String> newMap2 = new HashMap<String, String>();
+			newMap2.put("comment_user_id", "0");
+			HashMap<String, String> findMap2 = new HashMap<String, String>();
+			findMap2.put("comment_user_id", "" + id);
+			contentDAO.update(newMap2, null, findMap2);
+			
+			HashMap<String, String> newMap3 = new HashMap<String, String>();
+			newMap3.put("parent_user_id", "0");
+			HashMap<String, String> findMap3 = new HashMap<String, String>();
+			findMap3.put("parent_user_id", "" + id);
+			commentDAO.update(newMap3, null, findMap3);
+			
+			if(info != null) info.add(Strings.SUCCESS_0022);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0052);
+		}
+		return flag;
+	}
+	
+	public boolean update(long id, long point, String role, long userid, List<String> info) {
+		//TODO role
+		if(id <= 0 || point < 0 || userid <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + userid);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		User user = list1.get(0);
+		if(!user.getRole().equals(Strings.ROLE_OPERATOR) && !user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		newMap.put("point", "" + point);
+		newMap.put("role", role);
+		HashMap<String, String> findMap = new HashMap<String, String>();
+		findMap.put("id", "" + id);
+		
+		boolean flag = userDAO.update(newMap, null, findMap) == 1;
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0027);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0058);
+		}
+		return flag;
+	}
+	
+	public List<User> get(long id, long page, List<String> info) {
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(id > 0) map.put("id", "" + id);
+		map.put("status", Strings.STATUS_NORMAL);
+		
+		String other = null;
+		if(page > 0) other = "limit " + ((page - 1) * Strings.PAGE_USER) + "," + Strings.PAGE_USER;
+		
+		List<User> list = null;
+		if(map.size() != 0) list = userDAO.select(map, null, other != null ? other : null);
+		
+		if(list != null) {
+			if(info != null) info.add(Strings.SUCCESS_0024);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0057);
+		}
+		return list;
+	}
+	
+	public List<User> select(long id, String username, String email, String emailstatus, String role, String status, long userid, long page, List<String> info) {
+		
+		if(userid <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return null;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + userid);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return null;
+		}
+		
+		User user = list1.get(0);
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(user.getRole().equals(Strings.ROLE_OPERATOR) || user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+			if(id > 0) map.put("id", "" + id);
+		} else {
+			if(id > 0) map.put("id", "" + userid);
+		}
+		if(email != null && checkEmail(email)) map.put("email", email);
+		if(emailstatus != null) map.put("email_status", emailstatus);
+		if(role != null) map.put("role", role);
+		if(status != null) map.put("status", status);
+		HashMap<String, String> likeMap = new HashMap<String, String>();
+		if(username != null && checkUsername(username)) likeMap.put("username", "%" + username + "%");
+		
+		String other = null;
+		if(page > 0) other = "limit " + ((page - 1) * Strings.PAGE_USER) + "," + Strings.PAGE_USER;
+		
+		List<User> list = userDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		
+		if(list != null) {
+			if(info != null) info.add(Strings.SUCCESS_0024);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0057);
+		}
+		return list;
+	}
+	
+	public boolean sign(long id, List<String> info) {
+		
+		if(id <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", "" + id);
+		List<User> list = userDAO.select(map, null, null);
+		if(list == null || list.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		
+		User user = list.get(0);
+		
+		String time = (new SimpleDateFormat("yyyy-MM-dd 00:00:00.0")).format(new Date());
+		long random = SecurityUtil.random();
+		if(user.getSigned() != null && user.getSigned().toString().equals(time)) {
+			if(info != null) info.add(Strings.FAIL_0063);
+			return false;
+		}
+		
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		newMap.put("signed", time);
+		HashMap<String, Long> addMap = new HashMap<String, Long>();
+		addMap.put("point", random);
+		boolean flag = userDAO.update(newMap, addMap, map) == 1;
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0032 + "Get " + random + " point!");
+		} else {
+			if(info != null) info.add(Strings.FAIL_0063);
+		}
+		return flag;
+	}
 	
 	public boolean checkUsername(String username) {
 		return true;

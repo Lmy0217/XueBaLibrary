@@ -32,7 +32,7 @@ public class BaseDAO<T, PK extends Serializable> {
 
 		long result = -1;
 		Session s = null;
-		
+
 		try {
 			s = sessionFactory.getCurrentSession();
 			s.beginTransaction();
@@ -40,7 +40,8 @@ public class BaseDAO<T, PK extends Serializable> {
 			s.getTransaction().commit();
 		} catch (Exception e) {
 			result = -1;
-			if(s != null) s.getTransaction().rollback();
+			if (s != null)
+				s.getTransaction().rollback();
 			e.printStackTrace();
 		}
 
@@ -60,7 +61,8 @@ public class BaseDAO<T, PK extends Serializable> {
 			s.getTransaction().commit();
 		} catch (Exception e) {
 			list = null;
-			if(s != null) s.getTransaction().rollback();
+			if (s != null)
+				s.getTransaction().rollback();
 			e.printStackTrace();
 		}
 
@@ -78,6 +80,8 @@ public class BaseDAO<T, PK extends Serializable> {
 		Iterator<Entry<String, String>> iter = map.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<String, String> entry = (Entry<String, String>) iter.next();
+			if (!checkInput(entry.getKey()) || !checkInput(entry.getValue()))
+				return -2;
 			k.append(entry.getKey() + ",");
 			v.append("'" + entry.getValue() + "',");
 		}
@@ -99,6 +103,8 @@ public class BaseDAO<T, PK extends Serializable> {
 		Iterator<Entry<String, String>> iter = map.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<String, String> entry = (Entry<String, String>) iter.next();
+			if (!checkInput(entry.getKey()) || !checkInput(entry.getValue()))
+				return -2;
 			kv.append(entry.getKey() + "='" + entry.getValue() + "' and ");
 		}
 
@@ -123,6 +129,9 @@ public class BaseDAO<T, PK extends Serializable> {
 			while (newiter.hasNext()) {
 				Entry<String, String> entry = (Entry<String, String>) newiter
 						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return -2;
 				newsb.append(entry.getKey() + "='" + entry.getValue() + "',");
 			}
 		}
@@ -132,6 +141,8 @@ public class BaseDAO<T, PK extends Serializable> {
 			while (additer.hasNext()) {
 				Entry<String, Long> entry = (Entry<String, Long>) additer
 						.next();
+				if (!checkInput(entry.getKey()))
+					return -2;
 				newsb.append(entry.getKey() + "=" + entry.getKey() + "+'"
 						+ entry.getValue() + "',");
 			}
@@ -146,6 +157,9 @@ public class BaseDAO<T, PK extends Serializable> {
 			while (iter.hasNext()) {
 				Entry<String, String> entry = (Entry<String, String>) iter
 						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return -2;
 				sb.append(entry.getKey() + "='" + entry.getValue() + "' and ");
 			}
 			sb.delete(sb.length() - 5, sb.length());
@@ -174,6 +188,9 @@ public class BaseDAO<T, PK extends Serializable> {
 			while (newiter.hasNext()) {
 				Entry<String, String> entry = (Entry<String, String>) newiter
 						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return null;
 				sb.append(entry.getKey() + "='" + entry.getValue() + "' and ");
 			}
 		}
@@ -190,6 +207,9 @@ public class BaseDAO<T, PK extends Serializable> {
 			while (likeiter.hasNext()) {
 				Entry<String, String> entry = (Entry<String, String>) likeiter
 						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return null;
 				likesb.append(entry.getKey() + " like '" + entry.getValue()
 						+ "' or ");
 			}
@@ -198,10 +218,23 @@ public class BaseDAO<T, PK extends Serializable> {
 		if (likesb != null)
 			likesb.delete(likesb.length() - 4, likesb.length());
 
+		if (!checkOther(other))
+			return null;
+
 		return queryBySQL("select * from " + entityTableName + " where "
 				+ (sb != null ? sb.toString() : "")
 				+ ((sb != null && likesb != null) ? " and " : "")
 				+ (likesb != null ? ("(" + likesb.toString() + ")") : "")
 				+ ((other != null && !other.equals("")) ? (" " + other) : ""));
+	}
+
+	public boolean checkInput(String input) {
+		//TODO sql×¢Èë
+		return true;
+	}
+	
+	public boolean checkOther(String other) {
+		
+		return true;
 	}
 }

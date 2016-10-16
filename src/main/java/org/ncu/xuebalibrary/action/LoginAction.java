@@ -10,6 +10,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
+import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.entity.User;
 import org.ncu.xuebalibrary.listener.SessionListener;
 import org.ncu.xuebalibrary.service.UserService;
@@ -68,12 +69,20 @@ public class LoginAction extends ActionSupport {
 		request = ServletActionContext.getRequest();
 		session = request.getSession();
 		
-		if(session.getAttribute("id") != null) return "index";
-		
-		User user = null;
 		info = new ArrayList<String>();
 		
-		user = userService.login(username, password, info);
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
+		if(session.getAttribute("id") != null) return "index";
+		
+		User user = userService.login(username, password, info);
 		
 		if(user != null) {
 			session.setAttribute("id", user.getId());

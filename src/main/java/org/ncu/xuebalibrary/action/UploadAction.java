@@ -81,6 +81,15 @@ public class UploadAction extends ActionSupport {
 		boolean flag = false;
 		info = new ArrayList<String>();
 		
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
 		Object obj_id = session.getAttribute("id");
 		if(obj_id == null) return "login";
 		

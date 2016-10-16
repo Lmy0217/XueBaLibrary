@@ -72,4 +72,10 @@ public class SecurityUtil {
 		
 		return StringUtil.byte2String(byteArray);
 	}
+	
+	public static long random() {
+		Random random = new Random();
+		long result = random.nextInt(Strings.RANDOM_SIGN_POINT_LENGTH);
+		return result + Strings.RANDOM_SIGN_POINT_BEGIN;
+	}
 }

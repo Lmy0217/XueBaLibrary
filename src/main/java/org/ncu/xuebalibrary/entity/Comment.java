@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,11 +18,10 @@ public class Comment {
 	/** 主键ID */
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private long id;
 	
 	/** 内容 */
-	@Column(name = "text", nullable = false)
+	@Column(name = "text", nullable = false, columnDefinition = Strings.TYPE_TEXT)
 	private String text;
 	
 	/** 用户ID */
@@ -39,9 +36,13 @@ public class Comment {
 	@Column(name = "parent_user_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long parent_user_id;
 	
+	/** 回复的评论或帖子的父集评论或帖子的ID */
+	@Column(name = "grandparent_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
+	private long grandparent_id;
+	
 	/** 排序编号 */
 	@Column(name = "order_number", nullable = false)
-	private long order_number;
+	private String order_number;
 	
 	/** 回复数量 */
 	@Column(name = "comment_count", columnDefinition = Strings.TYPE_BIGINT + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
@@ -102,12 +103,20 @@ public class Comment {
 	public void setParent_user_id(long parent_user_id) {
 		this.parent_user_id = parent_user_id;
 	}
+	
+	public long getGrandparent_id() {
+		return grandparent_id;
+	}
 
-	public long getOrder_number() {
+	public void setGrandparent_id(long grandparent_id) {
+		this.grandparent_id = grandparent_id;
+	}
+
+	public String getOrder_number() {
 		return order_number;
 	}
 
-	public void setOrder_number(long order_number) {
+	public void setOrder_number(String order_number) {
 		this.order_number = order_number;
 	}
 

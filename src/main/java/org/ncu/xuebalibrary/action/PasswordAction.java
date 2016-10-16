@@ -108,9 +108,18 @@ public class PasswordAction extends ActionSupport {
 		boolean flag = false;
 		info = new ArrayList<String>();
 		
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
 		if(type == null) {
 			info.add(Strings.FAIL_0014);
-		} else if(type.equals(Strings.TYPE_PASSWORD)) {
+		} else if(type.equals(Strings.TYPE_UPDATE)) {
 			
 			Object obj_id = session.getAttribute("id");
 			if(obj_id == null) {
@@ -141,6 +150,15 @@ public class PasswordAction extends ActionSupport {
 				setResult(info.get(0));
 				return "result";
 			}
+			
+			long passwordemailtime = System.currentTimeMillis();
+			Object obj_passwordemailtime = session.getAttribute("passwordemailtime");
+			if(obj_passwordemailtime != null && passwordemailtime - (Long)obj_passwordemailtime <= Strings.EMAIL_SPACE){
+				info.add(Strings.FAIL_0064);
+				setResult(info.get(0));
+				return "result";
+			}
+			session.setAttribute("passwordemailtime", passwordemailtime);
 			
 			flag = userService.resetPasswordByEmail(id, key, info);
 			if(flag) {

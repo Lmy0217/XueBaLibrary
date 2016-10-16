@@ -22,17 +22,29 @@ public class Strings {
 	public static final String NUMERIAL_ZERO = "0";
 	
 	public static final String ROLE_VISITOR = "visitor";
+	public static final String ROLE_OPERATOR = "operator";
+	public static final String ROLE_ADMINISTRATOR = "administrator";
 	
 	public static final String TYPE_VARCHAR = "varchar(255)";
 	public static final String TYPE_BIGINT = "bigint(20)";
 	public static final String TYPE_INT = "int(11)";
+	public static final String TYPE_TEXT = "text";
 	
 	public static final String TYPE_SEND_ACTIVITE = "sendactivite";
 	public static final String TYPE_ACTIVITE = "activite";
 	public static final String TYPE_SEND_PASSWORD = "sendpassword";
-	public static final String TYPE_PASSWORD = "update";
+	public static final String TYPE_UPDATE = "update";
 	public static final String TYPE_FORGET = "forget";
 	public static final String TYPE_RESET = "reset";
+	public static final String TYPE_CREATE = "create";
+	public static final String TYPE_GET = "get";
+	public static final String TYPE_DELETE = "delete";
+	public static final String TYPE_SELECT = "select";
+	public static final String TYPE_VIEW = "view";
+	public static final String TYPE_VOTEUP = "voteup";
+	public static final String TYPE_VOTEDOWN = "votedown";
+	public static final String TYPE_RATE = "rate";
+	public static final String TYPE_SIGN = "sign";
 	
 	public static final String DEFAULT = " DEFAULT ";
 	public static final String UNSIGNED = " unsigned";
@@ -41,11 +53,26 @@ public class Strings {
 	public static final int SECURITY_SALT_LENGTH = 16;
 	public static final String SECURITY_HASH = "md5";
 	
+	public static final int RANDOM_SIGN_POINT_BEGIN = 5;
+	public static final int RANDOM_SIGN_POINT_LENGTH = 6;
+	
+	public static final int REGISTER_POINT = 20;
+	
+	public static final long TIME_SUMBIT_SPACE = 1000;
+	
+	public static final String FORMAT_COMMENTORDER = "000000000";
+	
+	public static final long PAGE_USER = 20;
+	public static final long PAGE_DOCUMENT = 20;
+	public static final long PAGE_CONTENT = 20;
+	public static final long PAGE_COMMENT = 20;
+	
 	public static final String EMAIL_HOST = "smtp.163.com";
 	public static final String EMAIL_PROTOCOL = "smtp";
 	public static final int EMAIL_PORT = 25;
 	public static final String EMAIL_FROM = "xuebalibrary@163.com";
 	public static final String EMAIL_PWD = "xuebalibrary1234";
+	public static final long EMAIL_SPACE = 60 * 1000;
 	public static final long EMAIL_OVERTIME = 24 * 60 * 60 * 1000;
 	public static final String EMAIL_SUBJECT_ACTIVITE = "5a2m6Zy45paH5bqT6LSm5Y+35r+A5rS76YKu5Lu277yM6K+35ZyoMjTlsI/ml7blhoXngrnlh7vpk77mjqXmv4DmtLvmgqjnmoTotKblj7c=";
 	public static final String EMAIL_SUBJECT_PASSWORD = "5a2m6Zy45paH5bqT6YeN572u5a+G56CB6YKu5Lu277yM6K+35ZyoMjTlsI/ml7blhoXngrnlh7vpk77mjqXph43nva7mgqjnmoTotKblj7flr4bnoIE=";
@@ -64,6 +91,27 @@ public class Strings {
 	public static final String SUCCESS_0009 = "Upload file success!";//文档上传成功！";
 	public static final String SUCCESS_0010 = "Add file success!";//文档添加成功！";
 	public static final String SUCCESS_0011 = "Get document success!";//获得文档成功！";
+	public static final String SUCCESS_0012 = "Create content success!";//帖子创建成功！";
+	public static final String SUCCESS_0013 = "Update content success!";//帖子更新成功！";
+	public static final String SUCCESS_0014 = "Create comment success!";//回复创建成功！";
+	public static final String SUCCESS_0015 = "Delete comment success!";//回复删除成功！";
+	public static final String SUCCESS_0016 = "Delete content success!";//帖子删除成功！";
+	public static final String SUCCESS_0017 = "Create category success!";//类别创建成功！";
+	public static final String SUCCESS_0018 = "Update category success!";//类别更新成功！";
+	public static final String SUCCESS_0019 = "Get content success!";//帖子获得成功！";
+	public static final String SUCCESS_0020 = "Delete category success!";//类别删除成功！";
+	public static final String SUCCESS_0021 = "Delete document success!";//文档删除成功！";
+	public static final String SUCCESS_0022 = "Delete user success!";//用户删除成功！";
+	public static final String SUCCESS_0023 = "Get category success!";//获得类型成功！";
+	public static final String SUCCESS_0024 = "Get user success!";//获得用户成功！";
+	public static final String SUCCESS_0025 = "Get comment success!";//获得评论成功！";
+	public static final String SUCCESS_0026 = "Update document success!";//文档更新成功！";
+	public static final String SUCCESS_0027 = "Update user success!";//更新用户成功！";
+	public static final String SUCCESS_0028 = "Vote up success!";
+	public static final String SUCCESS_0029 = "Vote down success!";
+	public static final String SUCCESS_0030 = "Add view success!";
+	public static final String SUCCESS_0031 = "Add rate success!";
+	public static final String SUCCESS_0032 = "Sign in success!";
 	
 	public static final String FAIL_0001 = "Username or password format error!";//用户名或密码格式错误！";
 	public static final String FAIL_0002 = "Email format error!";//邮箱格式错误！";
@@ -103,4 +151,30 @@ public class Strings {
 	public static final String FAIL_0036 = "Get document failed!";//获得文档失败！";
 	public static final String FAIL_0037 = "Deduct point failed!";//扣除积分失败！";
 	public static final String FAIL_0038 = "Convert document failed!";//转换文档失败！";
+	public static final String FAIL_0039 = "Create content failed!";//帖子创建失败！";
+	public static final String FAIL_0040 = "Content is not exist!";//帖子不存在！";
+	public static final String FAIL_0041 = "Permission denied!";//没有权限！";
+	public static final String FAIL_0042 = "Update content failed!";//帖子更新失败！";
+	public static final String FAIL_0043 = "Comment is not exist!";//回复不存在！";
+	public static final String FAIL_0044 = "Create comment failed!";//回复创建失败！";
+	public static final String FAIL_0045 = "Delete comment failed!";//回复删除失败！";
+	public static final String FAIL_0046 = "Delete content failed!";//帖子删除失败！";
+	public static final String FAIL_0047 = "Create category failed!";//类别创建失败！";
+	public static final String FAIL_0048 = "Update category failed!";//类别更新失败！";
+	public static final String FAIL_0049 = "Category is not exist!";//类别不存在！";
+	public static final String FAIL_0050 = "Delete category failed!";//类别删除失败！";
+	public static final String FAIL_0051 = "Delete document failed!";//文档删除失败！";
+	public static final String FAIL_0052 = "Delete user failed!";//用户删除失败！";
+	public static final String FAIL_0053 = "Get category failed!";//获得类型失败！";
+	public static final String FAIL_0054 = "Get content failed!";//获得帖子失败！";
+	public static final String FAIL_0055 = "Get comment failed!";//获得帖子失败！";
+	public static final String FAIL_0056 = "Update document failed!";//文档更新失败！";
+	public static final String FAIL_0057 = "Get user failed!";//获得用户失败！";
+	public static final String FAIL_0058 = "Update user failed!";//用户更新失败！";
+	public static final String FAIL_0059 = "Vote up failed!";
+	public static final String FAIL_0060 = "Vote down failed!";
+	public static final String FAIL_0061 = "Add view failed!";
+	public static final String FAIL_0062 = "Add rate failed!";
+	public static final String FAIL_0063 = "Sign in failed!";//签到失败！";
+	public static final String FAIL_0064 = "Operation too fast!";//操作过快！";
 }

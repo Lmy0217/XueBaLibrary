@@ -30,7 +30,7 @@ public class UploadInfoAction extends ActionSupport {
 	
 	private String title;
 	private String summary;
-	private long category_id;
+	private long categoryid;
 	private int price;
 	
 	private String result;
@@ -56,12 +56,12 @@ public class UploadInfoAction extends ActionSupport {
 		this.summary = summary;
 	}
 
-	public long getCategory_id() {
-		return category_id;
+	public long getCategoryid() {
+		return categoryid;
 	}
 
-	public void setCategory_id(long category_id) {
-		this.category_id = category_id;
+	public void setCategoryid(long categoryid) {
+		this.categoryid = categoryid;
 	}
 
 	public int getPrice() {
@@ -88,6 +88,15 @@ public class UploadInfoAction extends ActionSupport {
 		boolean flag = false;
 		info = new ArrayList<String>();
 		
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
 		Object obj_id = session.getAttribute("id");
 		if(obj_id == null) return "login";
 		
@@ -106,7 +115,7 @@ public class UploadInfoAction extends ActionSupport {
 			return "result";
 		}
 		
-		flag = documentService.create(title, summary, (String)obj_upload, category_id, (Long)obj_id, price, (String)obj_hash, info);
+		flag = documentService.create(title, summary, (String)obj_upload, categoryid, (Long)obj_id, price, (String)obj_hash, info);
 		
 		if(flag) {
 			session.removeAttribute("upload");

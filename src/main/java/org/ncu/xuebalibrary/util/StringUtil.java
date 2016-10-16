@@ -1,6 +1,9 @@
 package org.ncu.xuebalibrary.util;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
+
+import org.ncu.xuebalibrary.config.Strings;
 
 public class StringUtil {
 	
@@ -76,5 +79,13 @@ public class StringUtil {
 	
 	public static byte[] string2Byte(String string) {
 		return hex2Byte(string2Hex(string));
+	}
+	
+	public static String long2FormatString(long number) {
+		
+		if(number < 0) return null;
+		
+		DecimalFormat df = new DecimalFormat(Strings.FORMAT_COMMENTORDER);
+		return df.format(number);
 	}
 }

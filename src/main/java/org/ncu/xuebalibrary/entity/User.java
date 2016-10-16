@@ -83,7 +83,11 @@ public class User {
 	@Column(name = "status", columnDefinition = Strings.TYPE_VARCHAR + Strings.DEFAULT + Strings.QUOTE + Strings.STATUS_UNCHECK + Strings.QUOTE)
 	private String status;
 	
-	/** 创建日期 */
+	/** 签到日期 */
+	@Column(name = "signed")
+	private Date signed;
+	
+	/** 创建时间 */
 	@Column(name = "created")
 	private Date created;
 	
@@ -221,6 +225,14 @@ public class User {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public Date getSigned() {
+		return signed;
+	}
+
+	public void setSigned(Date signed) {
+		this.signed = signed;
 	}
 
 	public Date getCreated() {

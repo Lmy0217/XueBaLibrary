@@ -17,4 +17,12 @@ public class CategoryDAO extends BaseDAO<Category, Long> {
 		
 		return list != null && list.size() == 1;
 	}
+	
+	public boolean addDocument(long id, long number) {
+		
+		if(id <= 0 || number <= 0) return false;
+		
+		String sql = "update category set document_count = document_count + '" + number + "' where id = '" + id + "'";
+		return excuteBySQL(sql) == 1;
+	}
 }

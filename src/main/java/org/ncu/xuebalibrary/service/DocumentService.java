@@ -125,7 +125,9 @@ public class DocumentService {
 		
 		if(flag) {
 			//TODO trigger
-			userDAO.addDocument(1);
+			userDAO.addDocument(userid, 1L);
+			categoryDAO.addDocument(categoryid, 1L);
+			
 			if(info != null) info.add(Strings.SUCCESS_0010);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0033);
@@ -180,14 +182,11 @@ public class DocumentService {
 		}
 		
 		if(document.getPrice() != 0 && user.getId() != document.getUser_id()) {
-			HashMap<String, Long> addMap = new HashMap<String, Long>();
-			addMap.put("point", (long)(-document.getPrice()));
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("id", "" + user.getId());
-			if(userDAO.update(null, addMap, map) != 1) {
+			if(!userDAO.addPoint(userid, (long)(-document.getPrice()))) {
 				if(info != null) info.add(Strings.FAIL_0037);
 				return false;
-			}
+			}			
+			userDAO.addPoint(document.getUser_id(), document.getUser_id());
 		}
 		
 		if(info != null) info.add(Strings.SUCCESS_0011);
@@ -228,6 +227,221 @@ public class DocumentService {
 		return fileInputStream;
 	}
 	
+	//TODO test
+	public boolean delete(long userid, long id, List<String> info) {
+		
+		if(userid <= 0 || id <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + userid);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		User user = list1.get(0);
+		
+		HashMap<String, String> map2 = new HashMap<String, String>();
+		map2.put("id", "" + id);
+		List<Document> list2 = documentDAO.select(map2, null, null);
+		if(list2 == null || list2.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0034);
+			return false;
+		}
+		Document document = list2.get(0);
+		
+		if(document.getUser_id() != userid && !user.getRole().equals(Strings.ROLE_OPERATOR) && !user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		
+		boolean flag = documentDAO.delete(map2) == 1;
+		if(flag) {
+			FileUtil.deleteDocFile(this, document.getPath() + document.getSuffix());
+			FileUtil.deleteSwfFile(this, document.getPath() + ".swf");
+			
+			userDAO.addComment(document.getUser_id(), -1L);
+			categoryDAO.addDocument(document.getCategory_id(), -1L);
+			
+			if(info != null) info.add(Strings.SUCCESS_0021);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0051);
+		}
+		return flag;
+	}
+	
+	//TODO test
+	public boolean update(long id, long categoryid, int price, String status, long userid, List<String> info) {
+		//TODO status
+		if(id <= 0 || categoryid < 0 || price < 0 || status == null || userid <= 0 || !categoryDAO.checkId(categoryid) || !checkPrice(price)) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + userid);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		User user = list1.get(0);
+		if(!user.getRole().equals(Strings.ROLE_OPERATOR) && !user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return false;
+		}
+		
+		HashMap<String, String> newMap = new HashMap<String, String>();
+		newMap.put("category_id", "" + categoryid);
+		newMap.put("price", "" + price);
+		newMap.put("status", status);
+		HashMap<String, String> findMap = new HashMap<String, String>();
+		findMap.put("id", "" + id);
+		
+		boolean flag = documentDAO.update(newMap, null, findMap) == 1;
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0026);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0056);
+		}
+		return flag;
+	}
+	
+	public List<Document> get(long id, String title, String summary, long categoryid, long page, List<String> info) {
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(id > 0) map.put("id", "" + id);
+		if(categoryid >= 0) map.put("category_id", "" + categoryid);
+		map.put("status", Strings.STATUS_NORMAL);
+		HashMap<String, String> likeMap = new HashMap<String, String>();
+		if(title != null && checkTitle(title)) likeMap.put("title", "%" + title + "%");
+		if(summary != null && checkSummary(summary)) likeMap.put("text", "%" + summary + "%");
+		
+		String other = null;
+		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_DOCUMENT) + "," + Strings.PAGE_DOCUMENT;
+		
+		List<Document> list = null;
+		if(map.size() != 0 || likeMap.size() != 0)
+			list = documentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		
+		if(list != null) {
+			if(info != null) info.add(Strings.SUCCESS_0011);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0036);
+		}
+		return list;
+	}
+	
+	public List<Document> select(long id, String title, String summary, long categoryid, long documentuserid, String status, long userid, long page, List<String> info) {
+		
+		if(userid <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return null;
+		}
+		
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		map1.put("id", "" + userid);
+		List<User> list1 = userDAO.select(map1, null, null);
+		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0041);
+			return null;
+		}
+		
+		User user = list1.get(0);
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(id > 0) map.put("id", "" + id);
+		if(categoryid >= 0) map.put("category_id", "" + categoryid);
+		if(status != null) map.put("status", status);
+		if(user.getRole().equals(Strings.ROLE_OPERATOR) || user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+			if(documentuserid >= 0) map.put("user_id", "" + documentuserid);
+		} else {
+			map.put("user_id", "" + userid);
+		}
+		HashMap<String, String> likeMap = new HashMap<String, String>();
+		if(title != null && checkTitle(title)) likeMap.put("title", "%" + title + "%");
+		if(summary != null && checkSummary(summary)) likeMap.put("text", "%" + summary + "%");
+		
+		String other = null;
+		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_DOCUMENT) + "," + Strings.PAGE_DOCUMENT;
+		
+		List<Document> list = documentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		
+		if(list != null) {
+			if(info != null) info.add(Strings.SUCCESS_0011);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0036);
+		}
+		return list;
+	}
+	
+	public boolean voteUp(long id, List<String> info) {
+		
+		if(id <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		boolean flag = documentDAO.addVoteUp(id, 1L);
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0028);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0059);
+		}
+		return flag;
+	}
+	
+	public boolean voteDown(long id, List<String> info) {
+		
+		if(id <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		boolean flag = documentDAO.addVoteDown(id, 1L);
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0029);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0060);
+		}
+		return flag;
+	}
+	
+	public boolean addView(long id, List<String> info) {
+		
+		if(id <= 0) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		boolean flag = documentDAO.addView(id, 1L);
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0030);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0061);
+		}
+		return flag;
+	}
+	
+	public boolean rate(long id, int rate, List<String> info) {
+		
+		if(id <= 0 || rate < 0 || !checkRate(rate)) {
+			if(info != null) info.add(Strings.FAIL_0014);
+			return false;
+		}
+		
+		boolean flag = documentDAO.addRate(id, rate);
+		if(flag) {
+			if(info != null) info.add(Strings.SUCCESS_0031);
+		} else {
+			if(info != null) info.add(Strings.FAIL_0062);
+		}
+		return flag;
+	}
+	
 	public boolean checkHash(File file, List<Object> result) {
 		
 		if(file == null) return false;
@@ -260,6 +474,10 @@ public class DocumentService {
 	}
 	
 	public boolean checkPrice(int price) {
+		return true;
+	}
+	
+	public boolean checkRate(int rate) {
 		return true;
 	}
 }

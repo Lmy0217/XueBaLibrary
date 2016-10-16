@@ -86,12 +86,31 @@ public class RegisterAction extends ActionSupport {
 		request = ServletActionContext.getRequest();
 		session = request.getSession();
 		
-		if(session.getAttribute("id") != null) return "index";
-		
 		boolean flag = false;
 		info = new ArrayList<String>();
 		
+		long time = System.currentTimeMillis();
+		Object obj_sumbittime = session.getAttribute("sumbittime");
+		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
+			info.add(Strings.FAIL_0064);
+			setResult(info.get(0));
+			return "result";
+		}
+		session.setAttribute("sumbittime", time);
+		
+		if(session.getAttribute("id") != null) return "index";
+		
 		if(email != null && userService.checkEmail(email)) {
+			
+			long registeremailtime = System.currentTimeMillis();
+			Object obj_registeremailtime = session.getAttribute("registeremailtime");
+			if(obj_registeremailtime != null && registeremailtime - (Long)obj_registeremailtime <= Strings.EMAIL_SPACE){
+				info.add(Strings.FAIL_0064);
+				setResult(info.get(0));
+				return "result";
+			}
+			session.setAttribute("registeremailtime", registeremailtime);
+			
 			flag = userService.registerByEmail(username, password, email, info);
 		} else if (mobile != null && userService.checkMobile(mobile)) {
 			info.add(Strings.FAIL_0018);

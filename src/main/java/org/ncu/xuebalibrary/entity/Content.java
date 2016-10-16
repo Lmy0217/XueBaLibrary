@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,15 +18,14 @@ public class Content {
 	/** 主键ID */
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private long id;
 	
 	/** 标题 */
-	@Column(name = "title", nullable = false)
+	@Column(name = "title", nullable = false, columnDefinition = Strings.TYPE_TEXT)
 	private String title;
 	
 	/** 内容 */
-	@Column(name = "text", nullable = false)
+	@Column(name = "text", nullable = false, columnDefinition = Strings.TYPE_TEXT)
 	private String text;
 	
 	/** 用户ID */
@@ -36,7 +33,7 @@ public class Content {
 	private long user_id;
 	
 	/** 类别ID */
-	@Column(name = "category_id", nullable = false)
+	@Column(name = "category_id", columnDefinition = Strings.TYPE_BIGINT + Strings.UNSIGNED + Strings.DEFAULT + Strings.QUOTE + Strings.NUMERIAL_ZERO + Strings.QUOTE)
 	private long category_id;
 	
 	/** 状态 */
