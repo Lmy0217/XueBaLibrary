@@ -84,7 +84,7 @@ public class ContentService {
 		HashMap<String, String> newMap = new HashMap<String, String>();
 		newMap.put("title", title);
 		newMap.put("text", text);
-		if(categoryid != 0) newMap.put("category_id", "" + categoryid);
+		newMap.put("category_id", "" + categoryid);
 		newMap.put("modified", time);
 		HashMap<String, String> findMap = new HashMap<String, String>();
 		findMap.put("id", "" + id);

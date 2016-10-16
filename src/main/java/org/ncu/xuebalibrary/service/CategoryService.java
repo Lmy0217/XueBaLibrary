@@ -88,8 +88,8 @@ public class CategoryService {
 		
 		HashMap<String, String> newMap = new HashMap<String, String>();
 		newMap.put("name", name);
-		if(text != null) newMap.put("text", text);
-		if(parentid != 0) newMap.put("parent_id", "" + parentid);
+		newMap.put("text", text);
+		newMap.put("parent_id", "" + parentid);
 		HashMap<String, String> findMap = new HashMap<String, String>();
 		findMap.put("id", "" + id);
 		
