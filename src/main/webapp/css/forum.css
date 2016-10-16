@@ -300,3 +300,51 @@ body {
 
 /* end question.html */
 
+/* wenku.html */
+.aw-container-wenku{
+    background-color:#fff;
+    min-height:500px;
+}
+.aw-container-wenku .aw-wenku{
+    /* padding:40px 0; */
+}
+.aw-container-wenku .aw-wenku .aw-wrap-upload a{
+    display:block;
+    margin:50px auto 25px;
+    width:158px;
+    height:36px;
+    background:url('../images/cate-icons.png') no-repeat -296px -114px;
+    cursor:pointer;
+}
+.aw-wenku .aw-wrap-upload a:hover{
+    background:url('../images/cate-icons.png') no-repeat -296px -165px;
+}
+.aw-container-wenku .aw-wenku .aw-warp-classify{
+    width:200px;
+    margin:25px auto;
+}
+/* end wenku.html */
+
+
+
+/* view.html */
+.aw-view{
+    padding-left:3%;
+}
+/* end view.html */
+
+.aw-upload{
+    padding:10px 3%;
+}
+.aw-upload .hot-tip{
+    border-bottom:1px solid #e6e6e6;
+}
+.aw-upload .up-left{
+    border-right:1px solid #e6e6e6;
+    padding-top:10px;
+}
+.aw-upload .up-left .up-select{
+    width:100px;
+    height:30px;
+    
+}
