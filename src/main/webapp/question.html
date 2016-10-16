@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>论坛</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/forum.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- 导航 -->
+    <nav class="forum_head_nav">
+        <div class="aw-logo"><a href="index.html">学霸文库</a></div>
+        <div class="aw-search-box  ">
+            <input class="form-control search-query" type="text" placeholder="搜索问题">
+            <span title="搜索" id="global_search_btns">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+            <!-- <i class="icon icon-search"></i> -->
+        </div>
+        <div class="forum-login">
+            <a href="login.html" class="btn btn-primary">登录</a>
+            <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="clear"></div>
+    </nav>
+    <!-- end 导航 -->
+    <div class="container con_wrap">
+        <div class="aw-container-wrap">
+            <div class="row">
+                <div class="aw-content-wrap ">
+                    <!-- 侧边栏 -->
+                    <div class="  aw-main-content">
+                        <div class="aw-main-bar">
+                            <div class="aw-nav-find">
+                                <a href="#" class="active"><span><i class="glyphicon glyphicon-th-list"></i>问题</span></a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <!-- 文章列表 -->
+                        <div class="aw-explore-list">
+                            <div class="aw-qusetion">
+                                <div class="aw-question-content">
+                                    <h2>python写了个脚本把markdown文件转成json格式批量导入博客报错</h2>
+                                    <address>发起人：张三</address>
+                                    <p>Duplicate entry found. Multiple values of '' found for . 格式构造成下面这个样子的了，不太明白这个错误出在哪个字段上面，理论上所有子节点id uuid等字段是无重复的，猜测是HTML字段的问题，不知道如何处理这个 "posts": [{ "id": 2, "uuid": "4150734c-4fd6-437c-9a05-d4d28d3bb986", "title": "Hello Ghost", "slug": "hello-ghost", "markdown": "This is the begining", "mobiledoc": null, "html": "
+                                        <p>This is the begining</p>", "image": null, "featured": 0, "page": 0, "status": "published", "language": "en_US", "visibility": "public", "meta_title": null, "meta_description": null, "author_id": 1, "created_at": "2016-07-06T08:30:55.000Z", "created_by": 1, "updated_at": "2016-07-06T08:31:28.000Z", "updated_by": 1, "published_at": "2016-07-06T08:31:28.000Z", "published_by": 1 },
+                                    </p>
+                                </div>
+                                <div class="aw-question-bot">
+                                    <div class="aw-qusetion-time">
+                                        <span>2016-9-9</span>
+                                        <span>回复<i>4</i>次</span>
+                                        <span><a href="#" title=""><i class="glyphicon glyphicon-thumbs-up">赞</i></a></span>
+                                        <span><a href="#" title="">收藏</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end文章列表 -->
+                        <!-- 回复 列表-->
+                        <div class="aw-ask">
+                            <div class="aw-nav-ask">
+                                <span><i class="glyphicon glyphicon-th-list"></i>回复</span>
+                            </div>
+                            <div class="aw-replay row">
+                                <div class="aw-replay-L col-sm-1">
+                                    <img src="images/avatar-mid-img.png">
+                                </div>
+                                <div class="aw-replay-R col-sm-10">
+                                    <span class="username">ksjkdf</span>
+                                    <p>自己已经解决了，是 slug 这个字段的问题，这个slug其实就是网址栏显示的post标题，必须是英文 参考了源码： ghost\core\server\data\import\index.js 第110行开始那一段才知道的。 发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                    </p>
+                                    <div class="aw-replay-bottom">
+                                        <span><a href="#" title=""><i class="glyphicon glyphicon-thumbs-up">赞</i></a></span>
+                                        <span><a href="javascript:;" onclick="replay_show(this);" title="">回复<i class="badge">42</i></a></span>
+                                        <div class="replay-now">
+                                            <ul class="media-list">
+                                                <li class="media">
+                                                    <a href="#" class="media-left" title="">
+                                                        <img src="images/avatar-mid-img.png" alt="">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                                    </div>
+                                                </li>
+                                                <li class="media">
+                                                    <a href="#" class="media-left" title="">
+                                                        <img src="images/avatar-mid-img.png" alt="">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="replay-now-text">
+                                                <input type="text" class="form-control" placeholder="回复他">
+                                                <button type="submit" class="btn btn-default">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aw-replay row">
+                                <div class="aw-replay-L col-sm-1">
+                                    <img src="images/avatar-mid-img.png">
+                                </div>
+                                <div class="aw-replay-R col-sm-10">
+                                    <span class="username">ksjkdf</span>
+                                    <p>自己已经解决了，是 slug 这个字段的问题，这个slug其实就是网址栏显示的post标题，必须是英文 参考了源码： ghost\core\server\data\import\index.js 第110行开始那一段才知道的。 发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                    </p>
+                                    <div class="aw-replay-bottom">
+                                        <span><a href="#" title=""><i class="glyphicon glyphicon-thumbs-up">赞</i></a></span>
+                                        <span><a href="javascript:;" onclick="replay_show(this);" title="">回复<i class="badge">42</i></a></span>
+                                        <div class="replay-now">
+                                            <ul class="media-list">
+                                                <li class="media">
+                                                    <a href="#" class="media-left" title="">
+                                                        <img src="images/avatar-mid-img.png" alt="">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                                    </div>
+                                                </li>
+                                                <li class="media">
+                                                    <a href="#" class="media-left" title="">
+                                                        <img src="images/avatar-mid-img.png" alt="">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="replay-now-text">
+                                                <input type="text" class="form-control" placeholder="回复他">
+                                                <button type="submit" class="btn btn-default">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end回复 列表-->
+                        <!-- 分页 -->
+                        <nav>
+                            <ul class="pager">
+                                <li><a href="#">上一页</a></li>
+                                <li><a href="#">下一页</a></li>
+                            </ul>
+                        </nav>
+                        <!-- end分页 -->
+                        <div class="aw-rep">
+                            <div class="aw-nav">
+                                <span><i class="glyphicon glyphicon-th-list"></i>发表回复</span>
+                            </div>
+                            <div>
+                                <textarea class="form-control" rows="6" placeholder="回复"></textarea>
+                                <button type="button" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end侧边栏 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- start  footer-->
+    <footer class="footer">
+        <div>
+            <span>南昌大学版权所有@</span>
+        </div>
+    </footer>
+    <script type="text/javascript">
+    function replay_show(t) {
+        $(t).parent().next().toggle();
+    }
+    </script>
+    <!-- end footer -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
