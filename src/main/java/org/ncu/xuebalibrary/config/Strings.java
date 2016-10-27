@@ -3,14 +3,15 @@ package org.ncu.xuebalibrary.config;
 public class Strings {
 	
 	public static final String PROJECT_NAME = "XueBaLibrary";
-	public static final String PROJECT_URL = "http://127.0.0.1:8080/XueBaLibrary/";
+	public static final String PROJECT_URL = "http://webapps.myluo.cn/XueBaLibrary/";
 	
-	public static final String LIB_SWFTOOLS = "F:\\Program Files (x86)\\SWFTools\\pdf2swf.exe";
+	public static final String LIB_SWFTOOLS = "/usr/local/swftools/bin/pdf2swf";
 	
 	public static final String DIR_DOC = "XueBaLibraryDocs";
 	public static final String DIR_SWF = "XueBaLibraryDocs/swf";
 
 	public static final String QUOTE = "'";
+	
 	
 	public static final String STATUS_UNDEFINED = "undefined";
 	public static final String STATUS_NORMAL = "normal";

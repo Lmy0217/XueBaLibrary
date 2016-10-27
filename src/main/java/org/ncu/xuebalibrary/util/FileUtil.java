@@ -180,10 +180,11 @@ public class FileUtil {
 			pdfFile = docFile;
 		}
 		
-		String command = "\"" + Strings.LIB_SWFTOOLS + "\" -o \"" + swfDir.getAbsolutePath() + "\\" + filenameWithoutSuffix + ".swf\" -s flashversion=9 \"" + pdfFile.getAbsolutePath() + "\"";
+		String command = "\"" + Strings.LIB_SWFTOOLS + "\" -o \"" + swfDir.getAbsolutePath() + File.separatorChar + filenameWithoutSuffix + ".swf\" -s flashversion=9 \"" + pdfFile.getAbsolutePath() + "\"";
+		String[] c = {"/bin/sh", "-c", command};
 		Process pro = null;
 		try {
-			pro = Runtime.getRuntime().exec(command);
+			pro = Runtime.getRuntime().exec(c);
 			
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(pro.getInputStream()));
 			while (bufferedReader.readLine() != null);

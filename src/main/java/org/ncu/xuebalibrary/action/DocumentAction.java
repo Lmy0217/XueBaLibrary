@@ -217,6 +217,8 @@ public class DocumentAction extends ActionSupport {
 			documentService.voteDown(id, info);
 		} else if(type.equals(Strings.TYPE_RATE)) {
 			documentService.rate(id, rate, info);
+		} else {
+			info.add(Strings.FAIL_0014);
 		}
 		
 		setResult(info.get(0));

@@ -200,6 +200,8 @@ public class UserAction extends ActionSupport {
 			}
 		} else if(type.equals(Strings.TYPE_SIGN)) {
 			userService.sign((Long)obj_id, info);
+		} else {
+			info.add(Strings.FAIL_0014);
 		}
 		
 		setResult(info.get(0));

@@ -176,6 +176,8 @@ public class CategoryAction extends ActionSupport {
 			if(getList() != null) {
 				return "select";
 			}
+		} else {
+			info.add(Strings.FAIL_0014);
 		}
 		
 		setResult(info.get(0));

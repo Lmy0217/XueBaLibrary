@@ -202,6 +202,8 @@ public class CommentAction extends ActionSupport {
 			commentService.voteUp(id, info);
 		} else if(type.equals(Strings.TYPE_VOTEDOWN)) {
 			commentService.voteDown(id, info);
+		} else {
+			info.add(Strings.FAIL_0014);
 		}
 		
 		setResult(info.get(0));
