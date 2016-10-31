@@ -76,7 +76,7 @@ public class LoginOutAction extends ActionSupport {
 		if(type.equals(Strings.TYPE_USER)) {
 			setMap(map(Strings.SUCCESS, null, null, "login.html"));
 		} else if(session != null && session.getAttribute("role") != null && (session.getAttribute("role").equals(Strings.ROLE_OPERATOR) || session.getAttribute("role").equals(Strings.ROLE_ADMINISTRATOR))) {
-			setMap(map(Strings.SUCCESS, null, null, "admin-index.html"));
+			setMap(map(Strings.SUCCESS, null, null, "admin-login.html"));
 		} else {
 			setMap(map(Strings.FAIL, Strings.FAIL_0041, null, null));
 			return "result";
