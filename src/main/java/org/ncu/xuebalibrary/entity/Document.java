@@ -138,6 +138,14 @@ public class Document {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
 	public String getSuffix() {
 		return suffix;

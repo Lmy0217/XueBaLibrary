@@ -3,7 +3,9 @@ package org.ncu.xuebalibrary.action;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,7 +23,7 @@ import com.opensymphony.xwork2.ActionSupport;
 @ParentPackage("json-default")
 @Action(value = "swf", results = {
 		@Result(name = "swf", type = "stream", params = { "contentType", "application/x-shockwave-flash", "inputName", "swf", "bufferSize", "4096" }),
-		@Result(name = "result", type = "json", params = { "root", "result" })
+		@Result(name = "result", type = "json", params = { "root", "map" })
 })
 public class SwfAction extends ActionSupport {
 
@@ -34,9 +36,9 @@ public class SwfAction extends ActionSupport {
 	
 	private long documentid;
 	
-	private String result;
-	
 	private List<String> info;
+	
+	private Map<String, Object> map;
 	
 	private HttpServletRequest request;
 	private HttpSession session;
@@ -57,12 +59,21 @@ public class SwfAction extends ActionSupport {
 		this.documentid = documentid;
 	}
 
-	public String getResult() {
-		return result;
+	public Map<String, Object> getMap() {
+		return map;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+	
+	public Map<String, Object> map(String success, String info, List<Map<String, String>> data, String url) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("info", info);
+		map.put("data", data);
+		map.put("url", url);
+		return map;
 	}
 	
 	public String execute() {
@@ -75,8 +86,7 @@ public class SwfAction extends ActionSupport {
 		long time = System.currentTimeMillis();
 		Object obj_sumbittime = session.getAttribute("sumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
-			info.add(Strings.FAIL_0064);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
 		session.setAttribute("sumbittime", time);
@@ -85,7 +95,7 @@ public class SwfAction extends ActionSupport {
 		
 		FileInputStream fileInputStream = documentService.show(obj_id == null ? 0 : (Long)obj_id, documentid, info);
 		if(fileInputStream == null) {
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, info.get(0), null, null));
 			return "result";
 		}
 		

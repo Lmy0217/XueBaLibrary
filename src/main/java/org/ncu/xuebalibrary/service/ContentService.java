@@ -1,9 +1,11 @@
 package org.ncu.xuebalibrary.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.dao.CategoryDAO;
@@ -206,6 +208,49 @@ public class ContentService {
 			if(info != null) info.add(Strings.SUCCESS_0019);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0054);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> allToMap(List<Content> contentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(contentList == null || contentList.size() == 0) return list;
+		for(Content content : contentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + content.getId());
+			map.put("title", content.getTitle());
+			map.put("text", content.getText());
+			map.put("user_id", "" + content.getUser_id());
+			map.put("category_id", "" + content.getCategory_id());
+			map.put("status", content.getStatus());
+			map.put("order_number", "" + content.getOrder_number());
+			map.put("view_count", "" + content.getView_count());
+			map.put("comment_count", "" + content.getComment_count());
+			map.put("comment_time", content.getComment_time().toString());
+			map.put("comment_user_id", "" + content.getComment_user_id());
+			map.put("created", content.getCreated().toString());
+			map.put("modified", content.getModified().toString());
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> someToMap(List<Content> contentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(contentList == null || contentList.size() == 0) return list;
+		for(Content content : contentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + content.getId());
+			map.put("title", content.getTitle());
+			map.put("text", content.getText());
+			map.put("user_id", "" + content.getUser_id());
+			map.put("category_id", "" + content.getCategory_id());
+			map.put("view_count", "" + content.getView_count());
+			map.put("comment_count", "" + content.getComment_count());
+			map.put("comment_time", content.getComment_time().toString());
+			map.put("comment_user_id", "" + content.getComment_user_id());
+			map.put("modified", content.getModified().toString());
+			list.add(map);
 		}
 		return list;
 	}

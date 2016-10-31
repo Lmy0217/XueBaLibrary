@@ -1,9 +1,11 @@
 package org.ncu.xuebalibrary.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.dao.CommentDAO;
@@ -548,6 +550,46 @@ public class UserService {
 			if(info != null) info.add(Strings.SUCCESS_0024);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0057);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> allToMap(List<User> userList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(userList == null || userList.size() == 0) return list;
+		for(User user : userList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + user.getId());
+			map.put("username", user.getUsername());
+			map.put("email", user.getEmail());
+			map.put("mobile", user.getMobile());
+			map.put("point", "" + user.getPoint());
+			map.put("role", user.getRole());
+			map.put("avatar", user.getAvatar());
+			map.put("document_count", "" + user.getDocument_count());
+			map.put("content_count", "" + user.getContent_count());
+			map.put("comment_count", "" + user.getComment_count());
+			map.put("status", user.getStatus());
+			map.put("signed", user.getSigned().toString());
+			map.put("created", user.getCreated().toString());
+			map.put("logged", user.getLogged().toString());
+			map.put("activated", user.getActivated().toString());
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> someToMap(List<User> userList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(userList == null || userList.size() == 0) return list;
+		for(User user : userList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + user.getId());
+			map.put("username", user.getUsername());
+			map.put("document_count", "" + user.getDocument_count());
+			map.put("content_count", "" + user.getContent_count());
+			map.put("comment_count", "" + user.getComment_count());
+			list.add(map);
 		}
 		return list;
 	}

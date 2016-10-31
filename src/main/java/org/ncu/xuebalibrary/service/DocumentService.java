@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.dao.CategoryDAO;
@@ -374,6 +376,60 @@ public class DocumentService {
 			if(info != null) info.add(Strings.SUCCESS_0011);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0036);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> allToMap(List<Document> documentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(documentList == null || documentList.size() == 0) return list;
+		for(Document document : documentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + document.getId());
+			map.put("title", document.getTitle());
+			map.put("summary", document.getSummary());
+			map.put("path", document.getPath());
+			map.put("hash", document.getHash());
+			map.put("suffix", document.getSuffix());
+			map.put("category_id", "" + document.getCategory_id());
+			map.put("user_id", "" + document.getUser_id());
+			map.put("price", "" + document.getPrice());
+			map.put("status", document.getStatus());
+			map.put("order_number", "" + document.getOrder_number());
+			map.put("vote_up", "" + document.getVote_up());
+			map.put("vote_down", "" + document.getVote_down());
+			map.put("view_count", "" + document.getView_count());
+			map.put("rate", "" + document.getRate());
+			map.put("rate_count", "" + document.getRate_count());
+			map.put("mime_type", document.getMime_type());
+			map.put("meta_keywords", document.getMeta_keywords());
+			map.put("meta_description", document.getMeta_description());
+			map.put("created", document.getCreated().toString());
+			map.put("modified", document.getModified().toString());
+			map.put("remarks", document.getRemarks());
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> someToMap(List<Document> documentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(documentList == null || documentList.size() == 0) return list;
+		for(Document document : documentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + document.getId());
+			map.put("title", document.getTitle());
+			map.put("summary", document.getSummary());
+			map.put("category_id", "" + document.getCategory_id());
+			map.put("user_id", "" + document.getUser_id());
+			map.put("price", "" + document.getPrice());
+			map.put("vote_up", "" + document.getVote_up());
+			map.put("vote_down", "" + document.getVote_down());
+			map.put("view_count", "" + document.getView_count());
+			map.put("rate", "" + document.getRate());
+			map.put("rate_count", "" + document.getRate_count());
+			map.put("modified", document.getModified().toString());
+			list.add(map);
 		}
 		return list;
 	}

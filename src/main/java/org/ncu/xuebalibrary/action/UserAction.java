@@ -1,7 +1,9 @@
 package org.ncu.xuebalibrary.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,10 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "user", results = {
-		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "get", type = "json", params = { "includeProperties", "list\\[\\d+\\]\\.id,list\\[\\d+\\]\\.username,list\\[\\d+\\]\\.document_count,list\\[\\d+\\]\\.content_count,list\\[\\d+\\]\\.comment_count" }),
-		@Result(name = "select", type = "json", params = { "root", "list" }),
-		@Result(name = "login", type = "redirect", location = "/login.html")
+		@Result(name = "result", type = "json", params = { "root", "map" })
 })
 public class UserAction extends ActionSupport {
 
@@ -41,11 +40,11 @@ public class UserAction extends ActionSupport {
 	private String status;
 	private long page = 1;
 	
-	private String result;
-	
 	private List<User> list;
 	
 	private List<String> info;
+	
+	private Map<String, Object> map;
 	
 	private HttpServletRequest request;
 	private HttpSession session;
@@ -122,20 +121,21 @@ public class UserAction extends ActionSupport {
 		this.page = page;
 	}
 	
-	public String getResult() {
-		return result;
+	public Map<String, Object> getMap() {
+		return map;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
 	}
-
-	public List<User> getList() {
-		return list;
-	}
-
-	public void setList(List<User> list) {
-		this.list = list;
+	
+	public Map<String, Object> map(String success, String info, List<Map<String, String>> data, String url) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("info", info);
+		map.put("data", data);
+		map.put("url", url);
+		return map;
 	}
 	
 	public String execute() {
@@ -147,15 +147,15 @@ public class UserAction extends ActionSupport {
 		info = new ArrayList<String>();
 		
 		if(type == null) {
-			info.add(Strings.FAIL_0014);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
 			return "result";
 		} else if(type.equals(Strings.TYPE_GET)) {
-			setList(userService.get(id, page, info));
-			if(getList() != null) {
-				return "get";
+			list = userService.get(id, page, info);
+			if(list != null) {
+				setMap(map(Strings.SUCCESS, info.get(0), userService.someToMap(list), null));
+				return "result";
 			} else {
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, info.get(0), null, null));
 				return "result";
 			}
 		}
@@ -163,48 +163,62 @@ public class UserAction extends ActionSupport {
 		long time = System.currentTimeMillis();
 		Object obj_sumbittime = session.getAttribute("sumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
-			info.add(Strings.FAIL_0064);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
 		session.setAttribute("sumbittime", time);
 		
 		Object obj_id = session.getAttribute("id");
 		if(obj_id == null) {
-			info.add(Strings.FAIL_0019);
-			setResult(info.get(0));
-			return "login";
+			setMap(map(Strings.FAIL, Strings.FAIL_0019, null, "login.html"));
+			return "result";
 		}
 		
 		Object obj_status = session.getAttribute("status");
 		if(obj_status == null || ((String)obj_status).equals(Strings.STATUS_UNCHECK)) {
-			info.add(Strings.FAIL_0020);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0020, null, null));
 			return "result";
 		}
 		
 		if(type.equals(Strings.TYPE_UPDATE)) {
 			flag = userService.update(id, point, role, (Long)obj_id, info);
 			if(flag) {
-				
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
 			}
 		} else if(type.equals(Strings.TYPE_DELETE)) {
 			flag = userService.delete((Long)obj_id, id, info);
 			if(flag) {
-				
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
 			}
 		} else if(type.equals(Strings.TYPE_SELECT)) {
-			setList(userService.select(id, username, email, emailstatus, role, status, (Long)obj_id, page, info));
-			if(getList() != null) {
-				return "select";
+			list = userService.select(id, username, email, emailstatus, role, status, (Long)obj_id, page, info);
+			if(list != null) {
+				setMap(map(Strings.SUCCESS, info.get(0), userService.allToMap(list), null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
 			}
 		} else if(type.equals(Strings.TYPE_SIGN)) {
-			userService.sign((Long)obj_id, info);
+			flag = userService.sign((Long)obj_id, info);
+			if(flag) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
+			}
 		} else {
-			info.add(Strings.FAIL_0014);
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
 		}
-		
-		setResult(info.get(0));
-		return "result";
 	}
 }

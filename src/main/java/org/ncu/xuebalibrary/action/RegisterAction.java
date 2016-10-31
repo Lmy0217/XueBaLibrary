@@ -1,7 +1,9 @@
 package org.ncu.xuebalibrary.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,9 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "register", results = {
-		@Result(name = "login", type = "redirect", location = "/login.html"),
-		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "index", type = "redirect", location = "/index.html")
+		@Result(name = "result", type = "json", params = { "root", "map" })
 })
 public class RegisterAction extends ActionSupport {
 
@@ -34,9 +34,9 @@ public class RegisterAction extends ActionSupport {
 	private String email;
 	private String mobile;
 	
-	private String result;
-	
 	private List<String> info;
+	
+	private Map<String, Object> map;
 	
 	private HttpServletRequest request;
 	private HttpSession session;
@@ -73,12 +73,21 @@ public class RegisterAction extends ActionSupport {
 		this.mobile = mobile;
 	}
 
-	public String getResult() {
-		return result;
+	public Map<String, Object> getMap() {
+		return map;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+	
+	public Map<String, Object> map(String success, String info, List<Map<String, String>> data, String url) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("info", info);
+		map.put("data", data);
+		map.put("url", url);
+		return map;
 	}
 	
 	public String execute() {
@@ -92,37 +101,40 @@ public class RegisterAction extends ActionSupport {
 		long time = System.currentTimeMillis();
 		Object obj_sumbittime = session.getAttribute("sumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
-			info.add(Strings.FAIL_0064);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
 		session.setAttribute("sumbittime", time);
 		
-		if(session.getAttribute("id") != null) return "index";
+		if(session.getAttribute("id") != null) {
+			setMap(map(Strings.FAIL, null, null, "index.html"));
+			return "result";
+		}
 		
 		if(email != null && userService.checkEmail(email)) {
 			
 			long registeremailtime = System.currentTimeMillis();
 			Object obj_registeremailtime = session.getAttribute("registeremailtime");
 			if(obj_registeremailtime != null && registeremailtime - (Long)obj_registeremailtime <= Strings.EMAIL_SPACE){
-				info.add(Strings.FAIL_0064);
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 				return "result";
 			}
 			session.setAttribute("registeremailtime", registeremailtime);
 			
 			flag = userService.registerByEmail(username, password, email, info);
+			if(flag) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, "login.html"));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
+			}
 		} else if (mobile != null && userService.checkMobile(mobile)) {
-			info.add(Strings.FAIL_0018);
+			setMap(map(Strings.FAIL, Strings.FAIL_0018, null, null));
+			return "result";
 		} else {
-			info.add(Strings.FAIL_0014);
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
 		}
-		
-		if(flag) {
-			return "login";
-		}
-		
-		setResult(info.get(0));
-		return "result";
 	}
 }

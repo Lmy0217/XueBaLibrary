@@ -1,9 +1,11 @@
 package org.ncu.xuebalibrary.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.dao.CategoryDAO;
@@ -208,6 +210,45 @@ public class CategoryService {
 			if(info != null) info.add(Strings.SUCCESS_0023);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0053);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> allToMap(List<Category> categoryList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(categoryList == null || categoryList.size() == 0) return list;
+		for(Category category : categoryList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + category.getId());
+			map.put("name", category.getName());
+			map.put("text", category.getText());
+			map.put("icon", category.getIcon());
+			map.put("parent_id", "" + category.getParent_id());
+			map.put("document_count", "" + category.getDocument_count());
+			map.put("status", category.getStatus());
+			map.put("order_number", "" + category.getOrder_number());
+			map.put("meta_keywords", category.getMeta_keywords());
+			map.put("meta_description", category.getMeta_description());
+			map.put("created", category.getCreated().toString());
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> someToMap(List<Category> categoryList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(categoryList == null || categoryList.size() == 0) return list;
+		for(Category category : categoryList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + category.getId());
+			map.put("name", "" + category.getName());
+			map.put("text", category.getText());
+			map.put("icon", category.getIcon());
+			map.put("parent_id", "" + category.getParent_id());
+			map.put("document_count", "" + category.getDocument_count());
+			map.put("meta_keywords", category.getMeta_keywords());
+			map.put("meta_description", category.getMeta_description());
+			list.add(map);
 		}
 		return list;
 	}

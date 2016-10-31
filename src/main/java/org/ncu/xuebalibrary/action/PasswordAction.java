@@ -1,7 +1,9 @@
 package org.ncu.xuebalibrary.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,9 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "password", results = {
-		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "login", type = "redirect", location = "/login.html"),
-		@Result(name = "index", type = "redirect", location = "/index.html")
+		@Result(name = "result", type = "json", params = { "root", "map" })
 })
 public class PasswordAction extends ActionSupport {
 
@@ -37,9 +37,9 @@ public class PasswordAction extends ActionSupport {
 	private long id;
 	private String key;
 	
-	private String result;
-	
 	private List<String> info;
+	
+	private Map<String, Object> map;
 	
 	private HttpServletRequest request;
 	private HttpSession session;
@@ -92,12 +92,21 @@ public class PasswordAction extends ActionSupport {
 		this.key = key;
 	}
 
-	public String getResult() {
-		return result;
+	public Map<String, Object> getMap() {
+		return map;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+	
+	public Map<String, Object> map(String success, String info, List<Map<String, String>> data, String url) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("info", info);
+		map.put("data", data);
+		map.put("url", url);
+		return map;
 	}
 
 	public String execute() {
@@ -111,81 +120,100 @@ public class PasswordAction extends ActionSupport {
 		long time = System.currentTimeMillis();
 		Object obj_sumbittime = session.getAttribute("sumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
-			info.add(Strings.FAIL_0064);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
 		session.setAttribute("sumbittime", time);
 		
 		if(type == null) {
-			info.add(Strings.FAIL_0014);
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
 		} else if(type.equals(Strings.TYPE_UPDATE)) {
 			
 			Object obj_id = session.getAttribute("id");
 			if(obj_id == null) {
-				info.add(Strings.FAIL_0019);
-				setResult(info.get(0));
-				return "login";
+				setMap(map(Strings.FAIL, Strings.FAIL_0019, null, "login.html"));
+				return "result";
 			}
 			
 			Object obj_status = session.getAttribute("status");
 			if(obj_status == null || ((String)obj_status).equals(Strings.STATUS_UNCHECK)) {
-				info.add(Strings.FAIL_0020);
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, Strings.FAIL_0020, null, null));
 				return "result";
 			}
 			
-			userService.updatePassword((Long)obj_id, password, newpassword, info);
+			flag = userService.updatePassword((Long)obj_id, password, newpassword, info);
+			if(flag) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
+			}
 			
 		} else if(type.equals(Strings.TYPE_SEND_PASSWORD)) {
 			
-			if(session.getAttribute("id") != null) return "index";
-			
-			userService.sendResetPasswordEmail(username, info);
-			
-		} else if(type.equals(Strings.TYPE_FORGET)) {
-			
 			if(session.getAttribute("id") != null) {
-				info.add(Strings.FAIL_0024);
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, null, null, "index.html"));
 				return "result";
 			}
 			
 			long passwordemailtime = System.currentTimeMillis();
 			Object obj_passwordemailtime = session.getAttribute("passwordemailtime");
 			if(obj_passwordemailtime != null && passwordemailtime - (Long)obj_passwordemailtime <= Strings.EMAIL_SPACE){
-				info.add(Strings.FAIL_0064);
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 				return "result";
 			}
 			session.setAttribute("passwordemailtime", passwordemailtime);
+			
+			flag = userService.sendResetPasswordEmail(username, info);
+			if(flag) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
+			}
+			
+		} else if(type.equals(Strings.TYPE_FORGET)) {
+			
+			if(session.getAttribute("id") != null) {
+				setMap(map(Strings.FAIL, null, null, "index.html"));
+				return "result";
+			}
 			
 			flag = userService.resetPasswordByEmail(id, key, info);
 			if(flag) {
 				session.setAttribute("id", id);
 				SessionListener.add(session);
+				setMap(map(Strings.SUCCESS, info.get(0), null, null));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
 			}
 			
 		} else if(type.equals(Strings.TYPE_RESET)){
 			
 			Object obj_id = session.getAttribute("id");
 			if(obj_id == null) {
-				info.add(Strings.FAIL_0026);
-				setResult(info.get(0));
+				setMap(map(Strings.FAIL, Strings.FAIL_0026, null, null));
 				return "result";
 			}
 			
 			flag = userService.resetPassword((Long)obj_id, newpassword, info);
 			if(flag) {
 				session.invalidate();
-				//TODO
+				setMap(map(Strings.SUCCESS, info.get(0), null, "login.html"));
+				return "result";
+			} else {
+				setMap(map(Strings.FAIL, info.get(0), null, null));
+				return "result";
 			}
 			
 		} else {
-			info.add(Strings.FAIL_0014);
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
 		}
-		
-		setResult(info.get(0));
-		return "result";
 	}
 }

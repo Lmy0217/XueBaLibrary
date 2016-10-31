@@ -81,6 +81,7 @@ public class Strings {
 	public static final long OVERTIME_PASSWORD = 24 * 60 * 60 * 1000;
 	public static final long OVERTIME_RESET = 5 * 60 * 1000;
 	
+	public static final String SUCCESS = "true";
 	public static final String SUCCESS_0001 = "Register success!";//注册成功！";
 	public static final String SUCCESS_0002 = "Login success!";//登陆成功！";
 	public static final String SUCCESS_0003 = "Update password success!";//修改密码成功！";
@@ -114,6 +115,7 @@ public class Strings {
 	public static final String SUCCESS_0031 = "Add rate success!";
 	public static final String SUCCESS_0032 = "Sign in success!";
 	
+	public static final String FAIL = "false";
 	public static final String FAIL_0001 = "Username or password format error!";//用户名或密码格式错误！";
 	public static final String FAIL_0002 = "Email format error!";//邮箱格式错误！";
 	public static final String FAIL_0003 = "Email is registered!";//邮箱已被注册！";

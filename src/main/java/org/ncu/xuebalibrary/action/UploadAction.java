@@ -2,7 +2,9 @@ package org.ncu.xuebalibrary.action;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,8 +22,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @ParentPackage("json-default")
 @Action(value = "upload", results = {
-		@Result(name = "result", type = "json", params = { "root", "result" }),
-		@Result(name = "login", type = "redirect", location = "/login.html")
+		@Result(name = "result", type = "json", params = { "root", "map" })
 })
 public class UploadAction extends ActionSupport {
 
@@ -34,9 +35,9 @@ public class UploadAction extends ActionSupport {
 	private String uploadFileName;
 	private String uploadContentType;
 	
-	private String result;
-	
 	private List<String> info;
+	
+	private Map<String, Object> map;
 	
 	private HttpServletRequest request;
 	private HttpSession session;
@@ -65,12 +66,21 @@ public class UploadAction extends ActionSupport {
 		this.uploadContentType = uploadContentType;
 	}
 
-	public String getResult() {
-		return result;
+	public Map<String, Object> getMap() {
+		return map;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+	
+	public Map<String, Object> map(String success, String info, List<Map<String, String>> data, String url) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("info", info);
+		map.put("data", data);
+		map.put("url", url);
+		return map;
 	}
 	
 	public String execute() {
@@ -84,19 +94,20 @@ public class UploadAction extends ActionSupport {
 		long time = System.currentTimeMillis();
 		Object obj_sumbittime = session.getAttribute("sumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
-			info.add(Strings.FAIL_0064);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
 		session.setAttribute("sumbittime", time);
 		
 		Object obj_id = session.getAttribute("id");
-		if(obj_id == null) return "login";
+		if(obj_id == null) {
+			setMap(map(Strings.FAIL, Strings.FAIL_0019, null, "login.html"));
+			return "result";
+		}
 		
 		Object obj_status = session.getAttribute("status");
 		if(obj_status == null || ((String)obj_status).equals(Strings.STATUS_UNCHECK)) {
-			info.add(Strings.FAIL_0020);
-			setResult(info.get(0));
+			setMap(map(Strings.FAIL, Strings.FAIL_0020, null, null));
 			return "result";
 		}
 		
@@ -109,8 +120,12 @@ public class UploadAction extends ActionSupport {
 			session.setAttribute("upload", list.get(1));
 			session.setAttribute("hash", list.get(0));
 		}
-		
-		setResult(info.get(0));
-		return "result";
+		if(flag) {
+			setMap(map(Strings.SUCCESS, info.get(0), null, null));
+			return "result";
+		} else {
+			setMap(map(Strings.FAIL, info.get(0), null, null));
+			return "result";
+		}
 	}
 }

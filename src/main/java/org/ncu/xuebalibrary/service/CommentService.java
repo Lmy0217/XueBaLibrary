@@ -1,9 +1,11 @@
 package org.ncu.xuebalibrary.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.dao.CommentDAO;
@@ -229,6 +231,46 @@ public class CommentService {
 			if(info != null) info.add(Strings.SUCCESS_0025);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0055);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> allToMap(List<Comment> commentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(commentList == null || commentList.size() == 0) return list;
+		for(Comment comment : commentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + comment.getId());
+			map.put("text", comment.getText());
+			map.put("user_id", "" + comment.getUser_id());
+			map.put("parent_id", "" + comment.getParent_id());
+			map.put("parent_user_id", "" + comment.getParent_user_id());
+			map.put("grandparent_id", "" + comment.getGrandparent_id());
+			map.put("order_number", comment.getOrder_number());
+			map.put("comment_count", "" + comment.getComment_count());
+			map.put("vote_up", "" + comment.getVote_up());
+			map.put("vote_down", "" + comment.getVote_down());
+			map.put("status", comment.getStatus());
+			map.put("created", comment.getCreated().toString());
+			list.add(map);
+		}
+		return list;
+	}
+	
+	public List<Map<String, String>> someToMap(List<Comment> commentList) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		if(commentList == null || commentList.size() == 0) return list;
+		for(Comment comment : commentList) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", "" + comment.getId());
+			map.put("text", comment.getText());
+			map.put("user_id", "" + comment.getUser_id());
+			map.put("parent_id", "" + comment.getParent_id());
+			map.put("comment_count", "" + comment.getComment_count());
+			map.put("vote_up", "" + comment.getVote_up());
+			map.put("vote_down", "" + comment.getVote_down());
+			map.put("created", comment.getCreated().toString());
+			list.add(map);
 		}
 		return list;
 	}
