@@ -570,10 +570,10 @@ public class UserService {
 			map.put("content_count", "" + user.getContent_count());
 			map.put("comment_count", "" + user.getComment_count());
 			map.put("status", user.getStatus());
-			map.put("signed", user.getSigned().toString());
+			map.put("signed", user.getSigned() != null ? user.getSigned().toString() : "");
 			map.put("created", user.getCreated().toString());
-			map.put("logged", user.getLogged().toString());
-			map.put("activated", user.getActivated().toString());
+			map.put("logged", user.getLogged() != null ? user.getLogged().toString() : "");
+			map.put("activated", user.getActivated() != null ? user.getActivated().toString() : "");
 			list.add(map);
 		}
 		return list;
