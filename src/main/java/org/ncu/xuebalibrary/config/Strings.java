@@ -46,6 +46,8 @@ public class Strings {
 	public static final String TYPE_VOTEDOWN = "votedown";
 	public static final String TYPE_RATE = "rate";
 	public static final String TYPE_SIGN = "sign";
+	public static final String TYPE_ADMIN = "admin";
+	public static final String TYPE_USER = "user";
 	
 	public static final String DEFAULT = " DEFAULT ";
 	public static final String UNSIGNED = " unsigned";

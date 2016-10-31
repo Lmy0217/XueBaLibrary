@@ -33,6 +33,7 @@ public class LoginAction extends ActionSupport {
 
 	private String username;
 	private String password;
+	private String type;
 	
 	private List<String> info;
 	
@@ -55,6 +56,14 @@ public class LoginAction extends ActionSupport {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Map<String, Object> getMap() {
@@ -82,12 +91,17 @@ public class LoginAction extends ActionSupport {
 		info = new ArrayList<String>();
 		
 		long time = System.currentTimeMillis();
-		Object obj_sumbittime = session.getAttribute("sumbittime");
+		Object obj_sumbittime = session.getAttribute("loginsumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
 			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
-		session.setAttribute("sumbittime", time);
+		session.setAttribute("loginsumbittime", time);
+		
+		if(type == null || (!type.equals(Strings.TYPE_USER) && !type.equals(Strings.TYPE_ADMIN))) {
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
+		}
 		
 		if(session.getAttribute("id") != null) {
 			setMap(map(Strings.FAIL, null, null, "index.html"));
@@ -97,12 +111,19 @@ public class LoginAction extends ActionSupport {
 		User user = userService.login(username, password, info);
 		
 		if(user != null) {
+			if(type.equals(Strings.TYPE_USER)) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, "index.html"));
+			} else if(user.getRole().equals(Strings.ROLE_OPERATOR) || user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+				setMap(map(Strings.SUCCESS, info.get(0), null, "admin-index.html"));
+			} else {
+				setMap(map(Strings.FAIL, Strings.FAIL_0041, null, null));
+				return "result";
+			}
 			session.setAttribute("id", user.getId());
 			session.setAttribute("username", user.getUsername());
 			session.setAttribute("role", user.getRole());
 			session.setAttribute("status", user.getStatus());
 			SessionListener.add(session);
-			setMap(map(Strings.SUCCESS, info.get(0), null, "index.html"));
 			return "result";
 		} else {
 			setMap(map(Strings.FAIL, info.get(0), null, null));

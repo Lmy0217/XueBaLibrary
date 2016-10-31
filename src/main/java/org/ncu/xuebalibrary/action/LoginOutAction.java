@@ -23,10 +23,20 @@ public class LoginOutAction extends ActionSupport {
 
 	private static final long serialVersionUID = 4260387038302563868L;
 	
+	private String type;
+	
 	private HttpServletRequest request;
 	private HttpSession session;
 	
 	private Map<String, Object> map;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 	
 	public Map<String, Object> getMap() {
 		return map;
@@ -51,16 +61,28 @@ public class LoginOutAction extends ActionSupport {
 		session = request.getSession();
 		
 		long time = System.currentTimeMillis();
-		Object obj_sumbittime = session.getAttribute("sumbittime");
+		Object obj_sumbittime = session.getAttribute("loginoutsumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
 			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
-		session.setAttribute("sumbittime", time);
+		session.setAttribute("loginoutsumbittime", time);
+		
+		if(type == null || (!type.equals(Strings.TYPE_USER) && !type.equals(Strings.TYPE_ADMIN))) {
+			setMap(map(Strings.FAIL, Strings.FAIL_0014, null, null));
+			return "result";
+		}
+		
+		if(type.equals(Strings.TYPE_USER)) {
+			setMap(map(Strings.SUCCESS, null, null, "login.html"));
+		} else if(session != null && session.getAttribute("role") != null && (session.getAttribute("role").equals(Strings.ROLE_OPERATOR) || session.getAttribute("role").equals(Strings.ROLE_ADMINISTRATOR))) {
+			setMap(map(Strings.SUCCESS, null, null, "admin-index.html"));
+		} else {
+			setMap(map(Strings.FAIL, Strings.FAIL_0041, null, null));
+			return "result";
+		}
 		
 		session.invalidate();
-		
-		setMap(map(Strings.SUCCESS, null, null, "login.html"));
 		return "result";
 	}
 }

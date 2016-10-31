@@ -92,12 +92,12 @@ public class UploadAction extends ActionSupport {
 		info = new ArrayList<String>();
 		
 		long time = System.currentTimeMillis();
-		Object obj_sumbittime = session.getAttribute("sumbittime");
+		Object obj_sumbittime = session.getAttribute("uploadsumbittime");
 		if(obj_sumbittime != null && time - (Long)obj_sumbittime <= Strings.TIME_SUMBIT_SPACE){
 			setMap(map(Strings.FAIL, Strings.FAIL_0064, null, null));
 			return "result";
 		}
-		session.setAttribute("sumbittime", time);
+		session.setAttribute("uploadsumbittime", time);
 		
 		Object obj_id = session.getAttribute("id");
 		if(obj_id == null) {
