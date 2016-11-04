@@ -247,7 +247,7 @@ public class ContentService {
 			map.put("category_id", "" + content.getCategory_id());
 			map.put("view_count", "" + content.getView_count());
 			map.put("comment_count", "" + content.getComment_count());
-			map.put("comment_time", content.getComment_time().toString());
+			map.put("comment_time", content.getComment_time() != null ? content.getComment_time().toString() : "");
 			map.put("comment_user_id", "" + content.getComment_user_id());
 			map.put("modified", content.getModified().toString());
 			list.add(map);
