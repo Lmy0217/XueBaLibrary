@@ -418,7 +418,7 @@ public class UserService {
 			if(info != null) info.add(Strings.FAIL_0041);
 			return false;
 		}
-		User user2 = list1.get(0);
+		User user2 = list2.get(0);
 		
 		if(!(user1.getRole().equals(Strings.ROLE_OPERATOR) && user2.getRole().equals(Strings.ROLE_ADMINISTRATOR)) 
 				&& !(user1.getRole().equals(Strings.ROLE_VISITOR) && user2.getRole().equals(Strings.ROLE_OPERATOR))
