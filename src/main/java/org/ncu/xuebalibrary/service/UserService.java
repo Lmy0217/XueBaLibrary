@@ -458,20 +458,32 @@ public class UserService {
 	
 	public boolean update(long id, long point, String role, long userid, List<String> info) {
 		//TODO role
-		if(id <= 0 || point < 0 || userid <= 0) {
+		if(id <= 0 || point < 0 || role == null || userid <= 0) {
 			if(info != null) info.add(Strings.FAIL_0014);
 			return false;
 		}
 		
 		HashMap<String, String> map1 = new HashMap<String, String>();
-		map1.put("id", "" + userid);
+		map1.put("id", "" + id);
 		List<User> list1 = userDAO.select(map1, null, null);
 		if(list1 == null || list1.size() != 1) {
+			if(info != null) info.add(Strings.FAIL_0008);
+			return false;
+		}
+		User user1 = list1.get(0);
+		
+		HashMap<String, String> map2 = new HashMap<String, String>();
+		map2.put("id", "" + userid);
+		List<User> list2 = userDAO.select(map2, null, null);
+		if(list2 == null || list2.size() != 1) {
 			if(info != null) info.add(Strings.FAIL_0041);
 			return false;
 		}
-		User user = list1.get(0);
-		if(!user.getRole().equals(Strings.ROLE_OPERATOR) && !user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
+		User user2 = list2.get(0);
+		
+		if(!(user1.getRole().equals(Strings.ROLE_OPERATOR) && user2.getRole().equals(Strings.ROLE_ADMINISTRATOR) && (role.equals(Strings.ROLE_VISITOR) || role.equals(Strings.ROLE_OPERATOR) || role.equals(Strings.ROLE_ADMINISTRATOR))) 
+				&& !(user1.getRole().equals(Strings.ROLE_VISITOR) && user2.getRole().equals(Strings.ROLE_OPERATOR) && (role.equals(Strings.ROLE_VISITOR) || role.equals(Strings.ROLE_OPERATOR)))
+				&& !(user1.getRole().equals(Strings.ROLE_VISITOR) && user2.getRole().equals(Strings.ROLE_ADMINISTRATOR) && (role.equals(Strings.ROLE_VISITOR) || role.equals(Strings.ROLE_OPERATOR) || role.equals(Strings.ROLE_ADMINISTRATOR)))) {
 			if(info != null) info.add(Strings.FAIL_0041);
 			return false;
 		}
@@ -479,10 +491,8 @@ public class UserService {
 		HashMap<String, String> newMap = new HashMap<String, String>();
 		newMap.put("point", "" + point);
 		newMap.put("role", role);
-		HashMap<String, String> findMap = new HashMap<String, String>();
-		findMap.put("id", "" + id);
 		
-		boolean flag = userDAO.update(newMap, null, findMap) == 1;
+		boolean flag = userDAO.update(newMap, null, map1) == 1;
 		if(flag) {
 			if(info != null) info.add(Strings.SUCCESS_0027);
 		} else {
@@ -536,7 +546,7 @@ public class UserService {
 		if(user.getRole().equals(Strings.ROLE_OPERATOR) || user.getRole().equals(Strings.ROLE_ADMINISTRATOR)) {
 			if(id > 0) map.put("id", "" + id);
 		} else {
-			if(id > 0) map.put("id", "" + userid);
+			map.put("id", "" + userid);
 		}
 		if(email != null && checkEmail(email)) map.put("email", email);
 		if(emailstatus != null) map.put("email_status", emailstatus);
