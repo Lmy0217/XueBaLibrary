@@ -413,7 +413,7 @@ public class UserService {
 		
 		HashMap<String, String> map2 = new HashMap<String, String>();
 		map2.put("id", "" + userid);
-		List<User> list2 = userDAO.select(map1, null, null);
+		List<User> list2 = userDAO.select(map2, null, null);
 		if(list2 == null || list2.size() != 1) {
 			if(info != null) info.add(Strings.FAIL_0041);
 			return false;
