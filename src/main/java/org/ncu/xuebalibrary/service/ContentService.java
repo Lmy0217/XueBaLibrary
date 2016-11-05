@@ -157,12 +157,15 @@ public class ContentService {
 		String other = null;
 		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_CONTENT) + "," + Strings.PAGE_CONTENT;
 		
+		List<Object> count = null;
 		List<Content> list = null;
-		if(map.size() != 0 || likeMap.size() != 0)
+		if(map.size() != 0 || likeMap.size() != 0) {
+			count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 			list = contentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		}
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0019);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_CONTENT + 1));//Strings.SUCCESS_0019);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0054);
 		}
@@ -202,10 +205,11 @@ public class ContentService {
 		String other = null;
 		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_CONTENT) + "," + Strings.PAGE_CONTENT;
 		
+		List<Object> count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		List<Content> list = contentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0019);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_CONTENT + 1));//Strings.SUCCESS_0019);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0054);
 		}
@@ -226,7 +230,7 @@ public class ContentService {
 			map.put("order_number", "" + content.getOrder_number());
 			map.put("view_count", "" + content.getView_count());
 			map.put("comment_count", "" + content.getComment_count());
-			map.put("comment_time", content.getComment_time().toString());
+			map.put("comment_time", content.getComment_time() != null ? content.getComment_time().toString() : "");
 			map.put("comment_user_id", "" + content.getComment_user_id());
 			map.put("created", content.getCreated().toString());
 			map.put("modified", content.getModified().toString());

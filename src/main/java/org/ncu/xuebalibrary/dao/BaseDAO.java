@@ -69,6 +69,27 @@ public class BaseDAO<T, PK extends Serializable> {
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Object> queryBySQLFunction(String sql) {
+
+		List<Object> list = null;
+		Session s = null;
+
+		try {
+			s = sessionFactory.getCurrentSession();
+			s.beginTransaction();
+			list = s.createSQLQuery(sql).list();
+			s.getTransaction().commit();
+		} catch (Exception e) {
+			list = null;
+			if (s != null)
+				s.getTransaction().rollback();
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+
 	public long insert(HashMap<String, String> map) {
 
 		if (map == null || map.isEmpty())
@@ -228,13 +249,71 @@ public class BaseDAO<T, PK extends Serializable> {
 				+ ((other != null && !other.equals("")) ? (" " + other) : ""));
 	}
 
+	public List<Object> count(HashMap<String, String> map,
+			HashMap<String, String> likeMap, String other) {
+
+		if ((map == null || map.isEmpty())
+				&& (likeMap == null || likeMap.isEmpty()))
+			return queryBySQLFunction("select count(*) from "
+					+ entityTableName
+					+ ((other != null && !other.equals("")) ? (" " + other)
+							: ""));
+
+		StringBuilder sb = null;
+
+		if (map != null && !map.isEmpty()) {
+			sb = new StringBuilder();
+			Iterator<Entry<String, String>> newiter = map.entrySet().iterator();
+			while (newiter.hasNext()) {
+				Entry<String, String> entry = (Entry<String, String>) newiter
+						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return null;
+				sb.append(entry.getKey() + "='" + entry.getValue() + "' and ");
+			}
+		}
+
+		if (sb != null)
+			sb.delete(sb.length() - 5, sb.length());
+
+		StringBuilder likesb = null;
+
+		if (likeMap != null && !likeMap.isEmpty()) {
+			likesb = new StringBuilder();
+			Iterator<Entry<String, String>> likeiter = likeMap.entrySet()
+					.iterator();
+			while (likeiter.hasNext()) {
+				Entry<String, String> entry = (Entry<String, String>) likeiter
+						.next();
+				if (!checkInput(entry.getKey())
+						|| !checkInput(entry.getValue()))
+					return null;
+				likesb.append(entry.getKey() + " like '" + entry.getValue()
+						+ "' or ");
+			}
+		}
+
+		if (likesb != null)
+			likesb.delete(likesb.length() - 4, likesb.length());
+
+		if (!checkOther(other))
+			return null;
+
+		return queryBySQLFunction("select count(*) from " + entityTableName
+				+ " where " + (sb != null ? sb.toString() : "")
+				+ ((sb != null && likesb != null) ? " and " : "")
+				+ (likesb != null ? ("(" + likesb.toString() + ")") : "")
+				+ ((other != null && !other.equals("")) ? (" " + other) : ""));
+	}
+
 	public boolean checkInput(String input) {
-		//TODO sql×¢Èë
+		// TODO sql×¢Èë
 		return true;
 	}
-	
+
 	public boolean checkOther(String other) {
-		
+
 		return true;
 	}
 }

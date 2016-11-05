@@ -500,11 +500,15 @@ public class UserService {
 		String other = null;
 		if(page > 0) other = "limit " + ((page - 1) * Strings.PAGE_USER) + "," + Strings.PAGE_USER;
 		
+		List<Object> count = null;
 		List<User> list = null;
-		if(map.size() != 0) list = userDAO.select(map, null, other != null ? other : null);
+		if(map.size() != 0) {
+			count = userDAO.count(map, null, other != null ? other : null);
+			list = userDAO.select(map, null, other != null ? other : null);
+		}
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0024);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_USER + 1));//Strings.SUCCESS_0024);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0057);
 		}
@@ -544,10 +548,11 @@ public class UserService {
 		String other = null;
 		if(page > 0) other = "limit " + ((page - 1) * Strings.PAGE_USER) + "," + Strings.PAGE_USER;
 		
+		List<Object> count = userDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		List<User> list = userDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0024);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_USER + 1));//Strings.SUCCESS_0024);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0057);
 		}

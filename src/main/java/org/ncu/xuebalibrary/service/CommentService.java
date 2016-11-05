@@ -182,11 +182,15 @@ public class CommentService {
 		String other = null;
 		if(page > 0) other = "order by order_number limit " + ((page - 1) * Strings.PAGE_COMMENT) + "," + Strings.PAGE_COMMENT;
 		
+		List<Object> count = null;
 		List<Comment> list = null;
-		if(map.size() != 0 ) list = commentDAO.select(map, null, other != null ? other : null);
+		if(map.size() != 0 ) {
+			count = commentDAO.count(map, null, other != null ? other : null);
+			list = commentDAO.select(map, null, other != null ? other : null);
+		}
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0025);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_COMMENT + 1));//Strings.SUCCESS_0025);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0055);
 		}
@@ -225,10 +229,11 @@ public class CommentService {
 		String other = null;
 		if(page > 0) other = "order by order_number limit " + ((page - 1) * Strings.PAGE_COMMENT) + "," + Strings.PAGE_COMMENT;
 		
+		List<Object> count = commentDAO.count(map, null, other != null ? other : null);
 		List<Comment> list = commentDAO.select(map, null, other != null ? other : null);
 		
-		if(list != null) {
-			if(info != null) info.add(Strings.SUCCESS_0025);
+		if(count != null && list != null) {
+			if(info != null) info.add("" + ((Long.parseLong("" + count.get(0)) - 1) / Strings.PAGE_COMMENT + 1));//Strings.SUCCESS_0025);
 		} else {
 			if(info != null) info.add(Strings.FAIL_0055);
 		}
