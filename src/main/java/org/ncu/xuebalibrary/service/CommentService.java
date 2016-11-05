@@ -185,7 +185,7 @@ public class CommentService {
 		List<Object> count = null;
 		List<Comment> list = null;
 		if(map.size() != 0 ) {
-			count = commentDAO.count(map, null, other != null ? other : null);
+			count = commentDAO.count(map, null, null);
 			list = commentDAO.select(map, null, other != null ? other : null);
 		}
 		
@@ -229,7 +229,7 @@ public class CommentService {
 		String other = null;
 		if(page > 0) other = "order by order_number limit " + ((page - 1) * Strings.PAGE_COMMENT) + "," + Strings.PAGE_COMMENT;
 		
-		List<Object> count = commentDAO.count(map, null, other != null ? other : null);
+		List<Object> count = commentDAO.count(map, null, null);
 		List<Comment> list = commentDAO.select(map, null, other != null ? other : null);
 		
 		if(count != null && list != null) {

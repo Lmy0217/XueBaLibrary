@@ -328,7 +328,7 @@ public class DocumentService {
 		List<Object> count = null;
 		List<Document> list = null;
 		if(map.size() != 0 || likeMap.size() != 0) {
-			count = documentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+			count = documentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, null);
 			list = documentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		}
 		
@@ -373,7 +373,7 @@ public class DocumentService {
 		String other = null;
 		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_DOCUMENT) + "," + Strings.PAGE_DOCUMENT;
 		
-		List<Object> count = documentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		List<Object> count = documentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, null);
 		List<Document> list = documentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		
 		if(count != null && list != null) {

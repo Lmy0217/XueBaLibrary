@@ -503,7 +503,7 @@ public class UserService {
 		List<Object> count = null;
 		List<User> list = null;
 		if(map.size() != 0) {
-			count = userDAO.count(map, null, other != null ? other : null);
+			count = userDAO.count(map, null, null);
 			list = userDAO.select(map, null, other != null ? other : null);
 		}
 		
@@ -548,7 +548,7 @@ public class UserService {
 		String other = null;
 		if(page > 0) other = "limit " + ((page - 1) * Strings.PAGE_USER) + "," + Strings.PAGE_USER;
 		
-		List<Object> count = userDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		List<Object> count = userDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, null);
 		List<User> list = userDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		
 		if(count != null && list != null) {

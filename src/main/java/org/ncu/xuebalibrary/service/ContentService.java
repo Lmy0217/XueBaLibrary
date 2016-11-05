@@ -160,7 +160,7 @@ public class ContentService {
 		List<Object> count = null;
 		List<Content> list = null;
 		if(map.size() != 0 || likeMap.size() != 0) {
-			count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+			count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, null);
 			list = contentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		}
 		
@@ -205,7 +205,7 @@ public class ContentService {
 		String other = null;
 		if(page > 0) other = "order by created desc limit " + ((page - 1) * Strings.PAGE_CONTENT) + "," + Strings.PAGE_CONTENT;
 		
-		List<Object> count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
+		List<Object> count = contentDAO.count(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, null);
 		List<Content> list = contentDAO.select(map.size() != 0 ? map : null, likeMap.size() != 0 ? likeMap : null, other != null ? other : null);
 		
 		if(count != null && list != null) {
