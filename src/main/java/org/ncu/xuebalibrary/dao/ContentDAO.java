@@ -2,11 +2,33 @@ package org.ncu.xuebalibrary.dao;
 
 import java.util.List;
 
+import org.ncu.xuebalibrary.config.Strings;
 import org.ncu.xuebalibrary.entity.Content;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ContentDAO extends BaseDAO<Content, Long> {
+	
+	private static long nextId = -1;
+	
+	private long getMaxId() {
+		
+		String sql = "select max(id) from content";
+		List<Object> max = queryBySQLFunction(sql);
+		if(max != null && max.get(0) != null) {
+			return Long.parseLong("" + max.get(0));
+		} else {
+			return 1 - Strings.CONTENTALLOCATIONSIZE;
+		}
+	}
+	
+	public long getNextId() {
+		
+		if(nextId == -1) nextId = getMaxId();
+		
+		nextId += Strings.CONTENTALLOCATIONSIZE;
+		return nextId;
+	}
 
 	public boolean checkId(long id) {
 

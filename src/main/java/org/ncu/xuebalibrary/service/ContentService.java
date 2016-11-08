@@ -14,7 +14,6 @@ import org.ncu.xuebalibrary.dao.ContentDAO;
 import org.ncu.xuebalibrary.dao.UserDAO;
 import org.ncu.xuebalibrary.entity.Content;
 import org.ncu.xuebalibrary.entity.User;
-import org.ncu.xuebalibrary.util.GenerationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class ContentService {
 		String time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("id", "" + GenerationUtil.getContentId());
+		map.put("id", "" + contentDAO.getNextId());
 		map.put("title", title);
 		map.put("text", text);
 		map.put("user_id", "" + userid);

@@ -52,6 +52,9 @@ public class Strings {
 	public static final String DEFAULT = " DEFAULT ";
 	public static final String UNSIGNED = " unsigned";
 	
+	public static final long CONTENTALLOCATIONSIZE = 2;
+	public static final long COMMENTALLOCATIONSIZE = 2;
+	
 	public static final String SECURITY_TYPE = "sha-256";
 	public static final int SECURITY_SALT_LENGTH = 16;
 	public static final String SECURITY_HASH = "md5";

@@ -14,7 +14,6 @@ import org.ncu.xuebalibrary.dao.UserDAO;
 import org.ncu.xuebalibrary.entity.Comment;
 import org.ncu.xuebalibrary.entity.Content;
 import org.ncu.xuebalibrary.entity.User;
-import org.ncu.xuebalibrary.util.GenerationUtil;
 import org.ncu.xuebalibrary.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ public class CommentService {
 			
 			String time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("id", "" + GenerationUtil.getCommentId());
+			map.put("id", "" + commentDAO.getNextId());
 			map.put("text", text);
 			map.put("user_id", "" + userid);
 			map.put("parent_id", "" + parentid);
@@ -87,7 +86,7 @@ public class CommentService {
 			
 			String time = (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(new Date());
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("id", "" + GenerationUtil.getCommentId());
+			map.put("id", "" + commentDAO.getNextId());
 			map.put("text", text);
 			map.put("user_id", "" + userid);
 			map.put("parent_user_id", "" + comment.getUser_id());
