@@ -111,6 +111,7 @@ public class CommentService {
 				if(isContentId(comment.getParent_id())) {
 					commentDAO.addComment(parentid, 1L);
 				} else if(isCommentId(comment.getParent_id())) {
+					commentDAO.addComment(parentid, 1L);
 					commentDAO.addComment(comment.getParent_id(), 1L);
 				}
 				
