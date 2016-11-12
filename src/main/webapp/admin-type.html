@@ -1,0 +1,300 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>后台管理系统</title>
+  <meta name="description" content="这是一个 index 页面">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+	<script type="text/javascript" src="assets/js/popwin.js"></script>
+  <script src="assets/js/admin.js"></script>
+</head>
+<body>
+
+<header class="am-topbar am-topbar-inverse admin-header">
+  <div class="am-topbar-brand">
+    <strong>学霸文库</strong> <small>后台管理系统</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+		<li><a href="javascript:void(0)" class="adminloginout"><span style="color:red" class="am-icon-power-off"></span> 注销&nbsp </a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+        <li><a href="admin-user.html"><span class="am-icon-user"></span> 用户管理</a></li>
+        <li><a href="admin-file.html"><span class="am-icon-file"></span> 文档管理</a></li>
+        <li><a href="admin-invitation.html"><span class="am-icon-th"></span> 帖子管理</a></li>
+        <li><a href="admin-remark.html"><span class="am-icon-pencil"></span> 评论管理</a></li>
+        <li style="background-color:#5bc0de"><a href="admin-type.html"><span class="am-icon-puzzle-piece"></span> 类别管理</a></li>
+        <li><a href="javascript:void(0)" class="adminloginout"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-g">
+			<div class="am-u-sm-12 am-u-md-6">
+				<div class="am-btn-toolbar">
+					<div class="am-btn-group am-btn-group-xl">
+						<button type="button" class="am-btn am-btn-default" data-am-modal="{target: '#doc-modal-add', closeViaDimmer: 0, width: 400, height: 350}" onclick="addType();"><span class="am-icon-plus"></span> 新增</button>
+						<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-add">
+							<div class="am-modal-dialog">
+								<div class="am-modal-hd">添加类别
+									<a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+								</div>
+								<div class="am-modal-bd">
+									<div class="am-g am-margin-top">
+										<div class="am-u-md-4 am-text-right">
+											类别名：
+										</div>
+										<div class="am-u-md-8 am-text-left">
+											<input type="text" class="am-input-sm" id="typeName">
+										</div>
+									</div>
+									
+									<div class="am-g am-margin-top">
+										<div class="am-u-md-4 am-text-right">
+											上级类别：
+										</div>
+										<div class="am-u-md-8 am-text-left">
+											<div class="am-form-group">
+												<select id="doc-select-type">
+													
+												</select>
+												<span class="am-form-caret"></span>
+											</div>
+										</div>
+									</div>
+									
+									<div class="am-g am-margin-top">
+										<div class="am-u-md-4 am-text-right">
+											描述：
+										</div>
+										<div class="am-u-md-8 am-text-left">
+											<textarea type="text" class="am-input-sm" id="typeText"></textarea>
+										</div>
+									</div>
+									<hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" />
+									<button type="button" class="am-btn am-btn-primary" onclick="complete()">完成</button>
+									<button type="button" class="am-btn am-btn-default" data-am-modal-close>取消</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="float:right;padding-top:5px;">
+					<span style="display:block;float:left;padding-top:3px;">按父类别筛选：</span>
+					<select id="selectType">
+						<option value="-1">所有类别</option>
+						<option value="0">父级类别</option>
+					</select>
+					</div>
+					
+				</div>
+			</div>
+			
+        <div class="am-u-sm-12">
+          <table class="am-table am-table-bd am-table-striped admin-content-table">
+            <thead>
+            <tr>
+              <th>ID</th><th>类别名</th><th>文档数量</th><th>父类别ID</th><th>状态</th><th>描述</th><th>创建时间</th><th>管理</th>
+            </tr>
+            </thead>
+            <tbody id="typeTable">
+						<script>
+						$(document).ready(function(){
+							typelist();
+						});
+						function typelist(){
+							var data = new Object();
+								data["type"] = "select";
+								var parentid = sessionStorage.getItem("categoryType");
+								if(sessionStorage.getItem("categoryType") != -1 && sessionStorage.getItem("categoryType") != null){
+									data["parentid"] = parentid;
+								}
+								var url = 'category.action';
+								$.ajax({
+										url: url,
+										type: "GET",
+										data:data,
+										success: function (result) {
+											if(result.success == "true"){
+												$.each(result.data,function(n,value){
+													$('#typeTable').append('<tr><td>'+value.id+'</td><td>'+value.name+'</td><td>'+value.document_count+'</td><td>'+value.parent_id+'</td><td>'+value.status+'</td><td style="width:150px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+value.text+'</td><td>'+value.created+'</td>  <td><a  href="javascript:void(0)" style="color:#0b6fa2" onclick="editType('+value.id+')">&nbsp编辑&nbsp</a><a href="javascript:void(0)" style="color:#0b6fa2" onclick="deleteType('+value.id+')">&nbsp删除&nbsp</a></td> </tr>').trigger("create");
+													
+													
+												});
+												}else{
+													alert(result.info);
+											}
+										},
+										error:function (result){
+										},
+								});
+								$.ajax({
+										url: url,
+										type: "GET",
+										data:{type: "get",parentid: "0"},
+										success: function (result) {
+											if(result.success == "true"){
+												$.each(result.data,function(n,value){
+														if(n+1 == parentid){
+															$('#selectType').append('<option value="'+value.id+'" selected>'+value.name+'</option>').trigger("create");
+														}else{
+															$('#selectType').append('<option value="'+value.id+'">'+value.name+'</option>').trigger("create");
+														}
+														
+												});
+												}else{
+													alert(result.info);
+											}
+										},
+										error:function (result){
+										},
+								});
+								if(sessionStorage.getItem("categoryType") != -1 && sessionStorage.getItem("categoryType") != ""){
+									$("#selectType").find("option[value='"+parentid+"']").attr("selected",true);
+								}else{
+									$("#selectType").find("option[value=-1]").attr("selected",true);
+								}
+								sessionStorage.removeItem("categoryType");
+								
+						}
+						$("#selectType").change(function(){
+							sessionStorage.setItem("categoryType", $(this).val());
+							window.location.reload();
+						})
+						function addType(){
+								var url = 'category.action';
+							$.ajax({
+										url: url,
+										type: "GET",
+										data:{type: "select"},
+										success: function (result) {
+											if(result.success == "true"){
+													$('#doc-select-type').html("");
+													$('#doc-select-type').append('<option value="0" selected>无</option>').trigger("create");
+												$.each(result.data,function(n,value){
+													$('#doc-select-type').append('<option value="'+value.id+'">'+value.name+'</option>').trigger("create");
+													
+												});
+												}else{
+													alert(result.info);
+											}
+										},
+										error:function (result){
+										},
+								});
+						};
+						function deleteType(id){
+							if(confirm("确定要删除吗？")){
+										var url = 'category.action';
+										$.ajax({
+													url: url,
+													type: "GET",
+													data: { type: "delete",id:id },
+													success: function (result) {
+														if(result.success == "true"){
+																alert("删除成功！");
+																window.location.reload();
+															}else{
+																alert(result.info);
+														}
+													},
+													error:function (result){
+													},
+											});
+							}
+						};
+						function complete(){
+							if ($("#typeName").val() == "") {
+									alert("请输入类别名！");
+									return;
+							}
+							if ($("#typeText").val() == "") {
+									alert("请输入类别描述！")
+									return;
+							}
+
+							var url = 'category.action';
+							$.ajax({
+									url: url,
+									type: "POST",
+									data: { name: $.trim($("#typeName").val()),parentid: $("#doc-select-type").val(), text: $.trim($("#typeText").val()),type:"create" },
+									success: function (result) {
+										if(result.success == "true"){
+											alert("添加成功！");
+											window.location.reload();
+											$("#typeName").val("");
+											$("#typeText").val("");
+								　　}else{
+											alert(result.info);
+										}
+									},
+									error:function (result){
+									},
+							});
+						};
+						function editType(id){
+							sessionStorage.setItem("typeEditId", id);
+							popWin.showWin("800","375","编辑类型","admin-type-edit.html");
+						};
+						
+						</script>
+						
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+		</div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p align="center">© 2016 XueBaLibrary.</p>
+    </footer>
+  </div>
+  <!-- content end -->
+
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

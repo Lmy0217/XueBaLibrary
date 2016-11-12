@@ -1,10 +1,9 @@
 /* body */
+
 body {
     background-color: #ebebeb;
     min-width: 900px;
-
 }
-
 
 .clear {
     clear: both;
@@ -77,7 +76,7 @@ body {
     background-color: #202020;
     padding: 10px 40%;
     color: #fff;
-    width:100%;
+    width: 100%;
 }
 
 
@@ -115,14 +114,16 @@ body {
     background-color: #fff;
     padding: 10px 10%;
 }
-.forum_head_nav .aw-logo{
-    float:left;
-    font-size:25px;
-    margin-right:20px;
+
+.forum_head_nav .aw-logo {
+    float: left;
+    font-size: 25px;
+    margin-right: 20px;
 }
-.forum_head_nav .aw-logo a{
-    color:#000;
-    text-decoration:none;
+
+.forum_head_nav .aw-logo a {
+    color: #000;
+    text-decoration: none;
 }
 
 .forum_head_nav .aw-search-box {
@@ -142,28 +143,43 @@ body {
     float: right;
 }
 
+.forum_head_nav .log-out {
+    float: right;
+}
+
+.forum_head_nav .log-out a {
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
 
 /* end导航 */
 
 
 /* 内容 */
-.con_wrap{
-	margin-top:40px;
-	margin-bottom:40px;
-/* min-width:999px; */
-	
+
+.con_wrap {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    /* min-width:999px; */
 }
+
 .aw-container-wrap {
     padding: 0 3%;
-    margin:0 5%;
+    margin: 0 5%;
     background-color: #fff;
     border-bottom: 1px #e6e6e6 solid;
-    min-height:415px;
+    min-height: 415px;
 }
+
+
 /* 侧边栏 */
+
 .aw-container-wrap .aw-main-content {
-	margin: 0 1%;
+    margin: 0 1%;
 }
+
 .aw-container-wrap .aw-main-content .aw-main-bar .aw-nav-find .active span {
     float: left;
     color: #000;
@@ -178,173 +194,305 @@ body {
     padding-top: 5px;
 }
 
- .aw-main-content .aw-main-bar .aw-nav-tabs li {
+.aw-main-content .aw-main-bar .aw-nav-tabs li {
     color: #000;
 }
- .aw-explore-list .aw-commit-list{
- 	padding:10px 0;
- 	border-bottom:1px #e6e6e6 solid;
 
- }
- .aw-explore-list .aw-commit-list .list-image  {
-   text-align:center;
-   padding:5px 0 0 0;
+.aw-explore-list .aw-commit-list {
+    padding: 10px 0;
+    border-bottom: 1px #e6e6e6 solid;
 }
- .aw-explore-list .aw-commit-list .list-content span{
-	font-size:12px;
- }
- .aw-explore-list .aw-commit-list .list-replay{
- 	text-align:right;
- 	padding-top:20px;
- }
- .aw-explore-list .aw-commit-list .list-replay a{
- 	font-size:16px;
- 	color:#000;
- 	
 
- }
- .aw-main-content .aw-page  {
- 	text-align:center;
- }
+.aw-explore-list .aw-commit-list .list-image {
+    text-align: center;
+    padding: 5px 0 0 0;
+}
+
+.aw-explore-list .aw-commit-list .list-content span {
+    font-size: 12px;
+}
+
+.aw-explore-list .aw-commit-list .list-replay {
+    text-align: right;
+    padding-top: 20px;
+}
+
+.aw-explore-list .aw-commit-list .list-replay a {
+    font-size: 16px;
+    color: #000;
+}
+
+.aw-main-content .aw-page {
+    text-align: center;
+}
+
+
 /* end侧边栏 */
+
+
 /* 提问 */
-.aw-ask{
-    margin:60px 0;
+
+.aw-ask {
+    margin: 60px 0;
 }
-.aw-ask .aw-nav-ask{
-    margin:20px 0;
-    border-bottom:1px solid #e6e6e6;
+
+.aw-ask .aw-nav-ask {
+    margin: 20px 0;
+    border-bottom: 1px solid #e6e6e6;
 }
-.aw-ask .aw-nav-ask  span{
-    color:#000;
-    font-size:20px;
-    line-height:30px;
+
+.aw-ask .aw-nav-ask span {
+    color: #000;
+    font-size: 20px;
+    line-height: 30px;
 }
-.aw-ask .aw-ask-text input , textarea{
-    margin-bottom:20px;
+
+.aw-ask .aw-ask-text input,
+textarea {
+    margin-bottom: 20px;
 }
+
+
 /* end提问 */
 
+
 /* 右边栏 */
-.aw-main-right{
-	border-left:1px #e6e6e6 solid;
+
+.aw-main-right {
+    border-left: 1px #e6e6e6 solid;
 }
-.aw-main-right .hot-tip{
-	/* line-height:100px; */
-	border-bottom:1px #e6e6e6 solid;
+
+.aw-main-right .hot-tip {
+    /* line-height:100px; */
+    border-bottom: 1px #e6e6e6 solid;
 }
+
 .aw-main-right .hot-tip h5 {
-	line-height:50px;
-	text-align:right ;
+    line-height: 50px;
+    text-align: right;
 }
-.aw-main-right .li-img img{
-	 margin-left:-10px;
+
+.aw-main-right .li-img img {
+    margin-left: -10px;
 }
-.aw-main-right .hit-tip .tip-more{
-	    margin-top: 19px;
+
+.aw-main-right .hit-tip .tip-more {
+    margin-top: 19px;
 }
-.hot-tip-list-li{
-	margin:10px 0 10px 0;
-	border-bottom:1px #e6e6e6 solid;
+
+.hot-tip-list-li {
+    margin: 10px 0 10px 0;
+    border-bottom: 1px #e6e6e6 solid;
 }
+
+
 /* end右边栏 */
 
 
 /* end内容 */
 
 
-
 /* question.html */
-.aw-qusetion .aw-question-bot .aw-qusetion-time span{
-    color:#999;
-    display:inline-block;
-    margin-right:10px;
+
+.aw-qusetion .aw-question-bot {
+    margin-top: 50px;
 }
-.aw-replay{
-    border-bottom:1px solid #e6e6e6;
-    margin:20px 0;
-    padding-bottom:10px;
+
+.aw-qusetion .aw-question-bot .aw-qusetion-time span {
+    color: #999;
+    display: inline-block;
+    margin-right: 38px;
 }
-.aw-replay .aw-replay-R p{
-    line-height:40px;
-    color:#666;
-    margin-bottom: 100px;
+
+.aw-replay {
+    border-bottom: 1px solid #e6e6e6;
+    margin: 20px 0;
+    padding-bottom: 10px;
 }
-.aw-replay .aw-replay-R .aw-replay-bottom span{
-    display:inline-block;
-    margin-right:20px;
+
+.aw-replay .aw-replay-R p {
+    line-height: 40px;
+    color: #666;
+    margin-bottom: 30px;
 }
-.aw-replay .aw-replay-R .aw-replay-bottom span a{
-    text-decoration:none;
+
+.aw-replay .aw-replay-R .aw-replay-bottom span {
+    display: inline-block;
+    margin-right: 20px;
 }
-.aw-replay .aw-replay-R .aw-replay-bottom .replay-now{
-    border:1px solid #e6e6e6;
-    padding:20px 10px ;
+
+.aw-replay .aw-replay-R .aw-replay-bottom span a {
+    text-decoration: none;
+}
+
+.aw-replay .aw-replay-R .aw-replay-bottom .replay-now {
+    border: 1px solid #e6e6e6;
+    padding: 20px 10px;
     margin-top: 20px;
-    display:none;
+    display: none;
 }
-.aw-replay .aw-replay-R .aw-replay-bottom .replay-now .replay-now-text{
-    margin:20px 0;
+
+.aw-replay .aw-replay-R .aw-replay-bottom .replay-now .replay-now-text {
+    margin: 20px 0;
 }
-.aw-replay .aw-replay-R .aw-replay-bottom .replay-now .replay-now-text input{
-    margin:10px 0;
+
+.aw-replay .aw-replay-R .aw-replay-bottom .replay-now .replay-now-text input {
+    margin: 10px 0;
 }
-.aw-rep{
-    margin:30px 5%;
+
+.aw-rep {
+    margin: 30px 5%;
 }
-.aw-rep .aw-nav{
-    font-size:20px;
-    margin:20px 0 ;
+
+.aw-rep .aw-nav {
+    font-size: 20px;
+    margin: 20px 0;
 }
 
 
 /* end question.html */
 
+
 /* wenku.html */
-.aw-container-wenku{
-    background-color:#fff;
-    min-height:500px;
+
+.aw-container-wenku {
+    background-color: #fff;
+    min-height: 500px;
 }
-.aw-container-wenku .aw-wenku{
+
+.aw-container-wenku .aw-wenku {
     /* padding:40px 0; */
 }
-.aw-container-wenku .aw-wenku .aw-wrap-upload a{
-    display:block;
-    margin:50px auto 25px;
-    width:158px;
-    height:36px;
-    background:url('../images/cate-icons.png') no-repeat -296px -114px;
-    cursor:pointer;
+
+.aw-container-wenku .aw-wenku .aw-wrap-upload a {
+    display: block;
+    margin: 50px auto 25px;
+    width: 158px;
+    height: 36px;
+    background: url('../images/cate-icons.png') no-repeat -296px -114px;
+    cursor: pointer;
 }
-.aw-wenku .aw-wrap-upload a:hover{
-    background:url('../images/cate-icons.png') no-repeat -296px -165px;
+
+.aw-wenku .aw-wrap-upload a:hover {
+    background: url('../images/cate-icons.png') no-repeat -296px -165px;
 }
-.aw-container-wenku .aw-wenku .aw-warp-classify{
-    width:200px;
-    margin:25px auto;
+
+.aw-container-wenku .aw-wenku .aw-warp-classify {
+    width: 200px;
+    margin: 25px auto;
 }
+
+
 /* end wenku.html */
 
 
-
 /* view.html */
-.aw-view{
-    padding-left:3%;
+
+.aw-view {
+    padding-left: 3%;
 }
+
+
 /* end view.html */
 
-.aw-upload{
-    padding:10px 3%;
+
+/* upload.html */
+
+.aw-upload {
+    padding: 10px 3%;
 }
-.aw-upload .hot-tip{
-    border-bottom:1px solid #e6e6e6;
+
+.aw-upload .hot-tip {
+    border-bottom: 1px solid #e6e6e6;
 }
-.aw-upload .up-left{
-    border-right:1px solid #e6e6e6;
-    padding-top:10px;
+
+.aw-upload .up-left {
+    border-right: 1px solid #e6e6e6;
+    padding-top: 10px;
 }
-.aw-upload .up-left .up-select{
-    width:100px;
-    height:30px;
-    
+
+.aw-upload .up-left .up-select {
+    width: 100px;
+    height: 30px;
 }
+
+.aw-upload .up-right-select {
+    padding: 5% 30px;
+}
+
+.aw-upload .up-right-select .up-redio {
+    margin-left: 60px;
+}
+
+.aw-upload .up-right-select .radio span {
+    display: inline-block;
+    margin-left: 30px;
+    color: #c7c7c7;
+}
+
+.aw-upload .up-right-select .up-submit {
+    text-align: center;
+}
+
+.aw-upload .up-right-select .up-submit button {
+    width: 160px;
+    height: 35px;
+}
+
+#upload-price-select {
+    display: none;
+}
+
+#upload-price-select table {
+    margin: 20px auto;
+}
+
+
+/* end upload.html */
+
+
+/* user.html */
+
+.aw-user-top {
+    padding-top: 8px;
+    float: left;
+}
+
+.aw-user-content {
+    background-color: #fff;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.aw-user-content .aw-user-head{
+    padding:40px 5% 40px;
+
+}
+.aw-user-content .top-nav{
+    margin:10px 3%;
+    border-bottom:1px solid #ebebeb;
+}
+
+.aw-user-content .aw-user-headL {
+    float: left;
+}
+
+.aw-user-content .aw-user-headR {
+    float: left;
+    /* margin-left: 50px; */
+}
+
+.aw-user-content .aw-user-headR #fixPassword {
+    display: none;
+}
+
+.aw-user-content .aw-user-headR #fixPassword dt {
+    margin-top: 6px;
+}
+.user-content-text{
+    min-height:150px;
+}
+.user-content-text{
+    margin:0 10%;
+}
+/* end user.html */

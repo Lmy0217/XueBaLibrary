@@ -28,9 +28,13 @@
             </span>
             <!-- <i class="icon icon-search"></i> -->
         </div>
-        <div class="forum-login">
+        <div class="forum-login" id="user-no-log">
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="log-out" style="display: none;" id="user-log-out">
+            <a href="user.html" ><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
         </div>
         <div class="clear"></div>
     </nav>
@@ -47,40 +51,55 @@
                 <!-- end top -->
                 <!-- upload left -->
                 <div class="col-sm-6 up-left">
-                    <form role="form">
-                        <div class="form-group">
-                            <label for="up-title"><i>*</i>标题</label>
-                            <input type="text" class="form-control" id="up-title" placeholder="标题">
-                        </div>
-                        <div class="form-group">
-                            <label for="summary">简介</label>
-                            <textarea class="form-control" rows="4" id="summary" placeholder="请写入不超过200字的简介"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputFile">选择文件</label>
-                            <input type="file" id="inputFile">
-                        </div>
-                        <select class="up-select">
-                            <option>选择分类</option>
-                            <option>自然科学</option>
-                            <option>人文社科</option>
-                        </select>
-                    </form>
+                    <div class="form-group">
+                        <label for="up-title"><i>*</i>标题</label>
+                        <input type="text" class="form-control" id="up-title" placeholder="标题">
+                    </div>
+                    <div class="form-group">
+                        <label for="summary">简介</label>
+                        <textarea class="form-control" rows="4" id="summary" placeholder="请写入不超过200字的简介"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <form action="http://webapps.myluo.cn/XueBaLibrary/upload.action" method="post" enctype="multipart/form-data" id="submitFile">
+                            <input type="file" name="upload">
+                            <input type="submit" value="确定上传" style="display:none;">
+                        </form>
+                    </div>
+                    <select class="up-select" id="up-select">
+                        <option>选择分类</option>
+                    </select>
                 </div>
                 <!-- end upload left -->
                 <!-- upload right -->
-                <div class="col-sm-6">
-                    <div>
+                <div class="col-sm-6 up-right-select">
+                    <div class="up-redio">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>普通文档 <span>任何人可以检索和阅读</span>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>普通文档
                             </label>
+                            <span>任何人可以检索和阅读</span>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> 私有文档 <span>需要支付经验值才能检索和阅读</span>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"> 私有文档
                             </label>
+                            <span>需要支付经验值才能检索和阅读</span>
                         </div>
+                    </div>
+                    <div id="upload-price-select">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>收取的经验值：</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="1至10经验值不等" id="jingyan">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="up-submit">
+                        <button type="button" class="btn btn-primary" id="buttonArt">提交</button>
                     </div>
                 </div>
                 <!-- end upload right -->
@@ -96,7 +115,89 @@
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(".radio").change(function() {
+        if ($(".radio input:radio:checked").val() == "option2") {
+            $("#upload-price-select").show();
+        } else {
+            $("#upload-price-select").hide();
+        }
+    })
+    $(function() {
+        if ($.cookie('user_id') != null) {
+            $('#user-log-out').show();
+            $('#user-no-log').hide();
+            $("#askQuestion").show();
+            $('#log-username').html($.cookie('username'));
+
+
+            $('#buttonArt').click(function() {
+                $("#submitFile").submit();
+                var data = {};
+                data["title"] = $('#up-title').val();
+                data['summary'] = $('#summary').val();
+                data['categoryid'] = $('#up-select').val();
+                if ($('input[type="radio"]').val() == "option1") {
+                    data['price'] = 0;
+                } else {
+                    data['price'] = $('#jingyan').val();
+                }
+                $.ajax({
+                    type: 'post',
+                    url: 'uploadinfo.action',
+                    data: data,
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.success = "true") {
+                            alert(result.info);
+                        } else {
+                            alert(result.info);
+                        }
+                    }
+                })
+
+
+            })
+        }
+
+        $.ajax({
+            type: 'get',
+            url: 'category.action',
+            data: {
+                'type': 'get',
+                'parentid': 1
+            },
+            dataType: 'json',
+            success: function(result) {
+                $.each(result.data, function(n, value) {
+                    $('#up-select').append("<option value='" + value.id + "'>" + value.name + "</option>");
+                })
+            }
+        })
+    })
+
+
+
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+    </script>
 </body>
 
 </html>

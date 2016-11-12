@@ -9,12 +9,97 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/forum.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script type="text/javascript" src="js/swfobject/swfobject.js"></script>
+		<script type="text/javascript" src="js/flexpaper_flash.js"></script>
+		<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+		<script type="text/javascript"> 
+		$(function() {
+		if ($.cookie('user_id') != null) {
+            $('#user-log-out').show();
+            $('#user-no-log').hide();
+            $("#replay").show();
+            $('#log-username').html($.cookie('username'));
+
+        } else {
+            $('#replayArea').append('<div style="height:100px;text-align:center;"><a href="login.html">请先登录</a></div>');
+        }
+		var strUrl=window.location.href;
+		$.ajax({
+				url: document.action,
+				type: "GET",
+				data:{type: "get",id: strUrl.substring(strUrl.indexOf("=")+1)},
+				success: function (result) {
+					if(result.success == "true"){
+						 $('#title').html(result.data[0].title);
+						 $('#price').html(result.data[0].price);
+						 $('#viewcount').html(result.data[0].view_count);
+						 $('#voteup').html(result.data[0].vote_up);
+						 $('#votedown').html(result.data[0].vote_down);
+						 $.ajax({
+								url: "user.action",
+								type: "GET",
+								data:{type: "get", id: result.data[0].user_id},
+								success: function (result) {
+									$('#username').text(result.data[0].username);
+								}
+							});
+						 
+						}else{
+							alert(result.info);
+					}
+				},
+				error:function (result){
+				},
+		});
+            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
+            var swfVersionStr = "10.0.0";
+            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            var xiSwfUrlStr = "playerProductInstall.swf";
+            
+            var ret = "swf.action?documentid="+strUrl.substring(strUrl.indexOf("=")+1)+"";
+            
+            var flashvars = {
+                  SwfFile : escape(ret),
+				  Scale : 0.6, 
+				  ZoomTransition : "easeOut",
+				  ZoomTime : 0.5,
+  				  ZoomInterval : 0.1,
+  				  FitPageOnLoad : false,
+  				  FitWidthOnLoad : true,
+  				  PrintEnabled : true,
+  				  FullScreenAsMaxWindow : false,
+  				  ProgressiveLoading : true,
+  				  
+  				  PrintToolsVisible : true,
+  				  ViewModeToolsVisible : true,
+  				  ZoomToolsVisible : true,
+  				  FullScreenVisible : true,
+  				  NavToolsVisible : true,
+  				  CursorToolsVisible : true,
+  				  SearchToolsVisible : true,
+  				  
+  				  localeChain: "en_US"
+				  };
+				  
+			 var params = {
+				
+			    }
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            var attributes = {};
+            attributes.id = "FlexPaperViewer";
+            attributes.name = "FlexPaperViewer";
+            swfobject.embedSWF(
+                "FlexPaperViewer.swf", "flashContent", 
+                "100%", "500",
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+			})
+        </script> 
 </head>
 
 <body>
@@ -32,6 +117,10 @@
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
         </div>
+        <div class="log-out" style="display: none;">
+                <a href="" title=""><span class="glyphicon glyphicon-user">张三</span></a>
+                <a href="#" title=""><span class="glyphicon glyphicon-log-out"></span>退出</a>
+        </div>
         <div class="clear"></div>
     </nav>
     <!-- end 导航 -->
@@ -39,61 +128,34 @@
         <div class="aw-container-wenku">
             <div class="row">
                 <!-- 左边栏 -->
-                <div class="col-sm-9 aw-main-right aw-view">
+                <div class="col-sm-12 aw-main-right aw-view">
                     <div class="hot-tip">
                         <div>
-                            <h3>学霸资料</h3>
+                            <h3 id="title">学霸资料</h3>
+														<P>上传者：<span id="username" style="margin-right:10px;">lili</span>价格：<span id="price" style="margin-right:10px;">1</span><span style="float:right;margin-right:10px;">阅读量：<span id="viewcount" style="margin-right:10px;">12</span>赞：<span id="voteup" style="margin-right:10px;">2</span>踩：<span id="votedown" style="margin-right:10px;">2</span></span></P>
                         </div>
                     </div>
-                    <!-- <div class="hot-tip-list">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>类型</th>
-                                    <th>文档名称</th>
-                                    <th>上传者</th>
-                                    <th>下载量</th>
-                                    <th>下载积分</th>
-                                    <th>上传时间</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>PDF</td>
-                                    <td><a href="#" title="《强制保险条例》应该遵循哪些原则">《强制保险条例》应该遵循哪些原则</a></td>
-                                    <td>君顾咨询</td>
-                                    <td>1次</td>
-                                    <td>10</td>
-                                    <td>2016-10-10</td>
-                                </tr>
-                                <tr>
-                                    <td>PDF</td>
-                                    <td><a href="#" title="《强制保险条例》应该遵循哪些原则">《强制保险条例》应该遵循哪些原则</a></td>
-                                    <td>君顾咨询</td>
-                                    <td>1次</td>
-                                    <td>10</td>
-                                    <td>2016-10-10</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
-                    <!-- 分页 -->
-                    <!-- <nav>
-                        <ul class="pager">
-                            <li><a href="#">上一页</a></li>
-                            <li><a href="#">下一页</a></li>
-                        </ul>
-                    </nav> -->
+                    
                     <!-- 文章详情 -->
                     <div class="aw-view-article">
-                        
+                        <div id="flashContent"> 
+													<p> 
+														To view this page ensure that Adobe Flash Player version 
+												10.0.0 or greater is installed. 
+											</p> 
+											<script type="text/javascript"> 
+												var pageHost = ((document.location.protocol == "https:") ? "https://" :	"http://"); 
+												document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+																+ pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+											</script> 
+												</div>
                     </div>
                     <!-- end文章详情 -->
                     <!-- end分页 -->
                 </div>
                 <!-- end左边栏 -->
                 <!-- 侧边栏导航栏 -->
-                <div class="col-sm-3  aw-main-content aw-wenku">
+               <!--  <div class="col-sm-3  aw-main-content aw-wenku">
                     <div class="aw-wrap-upload">
                         <a href="#" title=""></a>
                     </div>
@@ -105,7 +167,7 @@
                             <a href="#" class="list-group-item " title="自然科学">自然科&nbsp;>></a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- end侧边栏导航栏  -->
             </div>
         </div>
@@ -118,7 +180,6 @@
     </footer>
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 </body>
 

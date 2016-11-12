@@ -89,16 +89,24 @@
             }else if(!$("#agree").is(':checked')){
                 alert("请阅读用户协议!");
             }else{
+                var userdata={};
+                userdata["username"]=$.trim($("#user_name").val());
+                userdata["password"]=$.trim($("#user_password").val());
+                userdata["email"]=$.trim($("#user_email").val());
                 $.ajax({
-                    url:"/register",
-                    type:"POST",
+                	type:'POST',
+                    url:"register.action",
+                    data:userdata,
                     dataType:"json",
-                    data:{username:$.trim($("#user_name").val()),password:$.trim($("#user_password").val()),email:$.trim($("user_email").val())},
                     success:function(result){
-                        if(result.success){
-                            window.location.href="/";
+                    	if(result.success=="ture"){
+                            alert("请先到邮箱中激活账号！");
+                            window.location.href=result.url;
+                        }else{
+                            alert(result.info);
                         }
                     }
+                    
                 })
             }
 

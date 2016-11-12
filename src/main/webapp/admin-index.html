@@ -1,0 +1,93 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>后台管理系统</title>
+  <meta name="description" content="这是一个 index 页面">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+  <script src="assets/js/admin.js"></script>
+</head>
+<body>
+
+<header class="am-topbar am-topbar-inverse admin-header">
+  <div class="am-topbar-brand">
+    <strong>学霸文库</strong> <small>后台管理系统</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+		<li><a href="javascript:void(0)" class="adminloginout"><span style="color:red" class="am-icon-power-off"></span> 注销&nbsp </a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li style="background-color:#5bc0de"><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+        <li><a href="admin-user.html"><span class="am-icon-user"></span> 用户管理</a></li>
+        <li><a href="admin-file.html"><span class="am-icon-file"></span> 文档管理</a></li>
+        <li><a href="admin-invitation.html"><span class="am-icon-th"></span> 帖子管理</a></li>
+        <li><a href="admin-remark.html"><span class="am-icon-pencil"></span> 评论管理</a></li>
+        <li><a href="admin-type.html"><span class="am-icon-puzzle-piece"></span> 类别管理</a></li>
+        <li><a href="javascript:void(0)"  class="adminloginout"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-cf am-padding">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">首页</strong> / <small>尊敬的用户：<span style="color:#0e90d2" id="adminNameTag"></span></small></div>
+      </div>
+			<p style="margin-left:20px;">欢迎使用学霸文库后台管理系统！</p>
+  </div>
+    <footer class="admin-content-footer">
+      <hr>
+      <p align="center">© 2016 XueBaLibrary.</p>
+    </footer>
+  </div>
+  <!-- content end -->
+
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
+  <script>
+		$(document).ready(function(){
+			var adminnametag = localStorage.getItem("admin");
+			if(localStorage.getItem("admin") != null){
+				$("#adminNameTag").text(adminnametag);
+			}else{
+				$("#adminNameTag").html("<a href='admin-login.html'>请登录</a>");
+			}
+			
+		});
+		
+	</script>
+</body>
+</html>

@@ -65,7 +65,14 @@ border-bottom:2px #0389fb solid;
 .header_bar  #navbar button{
 	margin-top:7px;
 }
-
+.header_bar .user-log-out{
+	color:#000;
+	margin-top: 15px;
+}
+.header_bar .user-log-out a{
+	display:inline-block;
+	margin-right:10px;
+}
 /* body */
 .content_area{
 	padding:40px 5% 0;

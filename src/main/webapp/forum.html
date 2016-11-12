@@ -28,9 +28,13 @@
             </span>
             <!-- <i class="icon icon-search"></i> -->
         </div>
-        <div class="forum-login">
+        <div class="forum-login" id="user-no-log">
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="log-out" style="display: none;" id="user-log-out">
+            <a href="user.html"><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
         </div>
         <div class="clear"></div>
     </nav>
@@ -47,15 +51,17 @@
                             </div>
                             <div class="aw-nav-tabs">
                                 <ul class="nav nav-tabs  ">
-                                    <li><a href="#">热门</a></li>
-                                    <li><a href="#">推荐</a></li>
-                                    <li><a href="#">最新</a></li>
+                                    <li><a href="javascript:;" onclick="getContent(1,10)">最新</a></li>
+                                    <li><a href="javascript:;" onclick="getContent(1,8)">热门</a></li>
+                                    <li><a href="javascript:;" onclick="getContent(1,9)">推荐</a></li>
                                 </ul>
                             </div>
                             <div class="clear"></div>
                         </div>
                         <!-- 文章列表 -->
-                        <div class="aw-explore-list">
+                        <div id="articleList">
+                        </div>
+                        <!-- <div class="aw-explore-list">
                             <div class="aw-commit-list row">
                                 <div class="list-image col-sm-1">
                                     <img src="images/logo.jpg" width="50px" height="50px">
@@ -68,41 +74,27 @@
                                     <a href="#">回复</a>
                                 </div>
                             </div>
-                        </div>
-                        <div class="aw-explore-list">
-                            <div class="aw-commit-list row">
-                                <div class="list-image col-sm-1">
-                                    <img src="images/logo.jpg" width="50px" height="50px">
-                                </div>
-                                <div class="list-content col-sm-9">
-                                    <h5><a href="#">中文完整版是集成了邮件服务吗？</a></h5>
-                                    <span><i>2</i>人关注•<i>3</i>个回复•<i>200</i>次浏览</span>
-                                </div>
-                                <div class="list-replay col-sm-2">
-                                    <a href="#">回复</a>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                         <!-- end文章列表 -->
                         <!-- 分页 -->
                         <nav>
                             <ul class="pager">
-                                <li><a href="#">上一页</a></li>
-                                <li><a href="#">下一页</a></li>
+                                <li><a href="javascript:;" id="upPage">上一页</a></li>
+                                <li><a href="javascript:;" id="nextPage">下一页</a></li>
                             </ul>
                         </nav>
                         <!-- end分页 -->
-                        <div class="aw-ask">
+                        <!-- 提问 -->
+                        <div class="aw-ask " id="aw-ask">
                             <div class="aw-nav-ask">
                                 <span><i class="glyphicon glyphicon-th-list"></i>提问</span>
                             </div>
-                            <div class="aw-ask-text">
-                            <input type="text"  value="" placeholder="问题" class="form-control">
-                                <textarea class="form-control" rows="4" placeholder="描述问题"></textarea>
-                                <button type="button" class="btn btn-primary">提交</button>
+                            <div class="aw-ask-text" id="askQuestion" style="display: none;">
+                                <input type="text" value="" placeholder="问题" class="form-control" id="questionTitle">
+                                <textarea class="form-control" rows="20" placeholder="描述问题" id="questionText"></textarea>
+                                <button type="button" class="btn btn-primary" id="buttonQusetion">提交</button>
                             </div>
                         </div>
-                        <!-- 提问 -->
                         <!-- end提问 -->
                     </div>
                     <!-- end侧边栏 -->
@@ -113,10 +105,10 @@
                                 <h3>热门话题</h3>
                             </div>
                             <div class="col-sm-4 tip-more">
-                                <h5><a href="#" title="">更多>></a></h5>
+                                <h5><a href="javascript:;" onclick="getContent(1,8)">更多>></a></h5>
                             </div>
                         </div>
-                        <div class="hot-tip-list">
+                        <div class="hot-tip-list" id="ce-question-list">
                             <div class="hot-tip-list-li row">
                                 <a href="#" title="">
                                     <div class="li-img col-xs-2"><img src="images/logo.jpg" width="40px" height="40px"></div>
@@ -141,7 +133,136 @@
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+
+        if ($.cookie('user_id') != null) {
+            $('#user-log-out').show();
+            $('#user-no-log').hide();
+            $("#askQuestion").show();
+            $('#log-username').html($.cookie('username'));
+
+        } else {
+            $('#aw-ask').append('<div style="height:100px;text-align:center;"><a href="login.html">请先登录</a></div>');
+        }
+        //获取问题列表
+        getContent(1, 10);
+        //获得侧边栏列表
+        getHotContent();
+    })
+    var contentPage = 1;
+
+    function nextPage(value, id) {
+        if (value == 1) {
+            var t = ++contentPage;
+            getContent(t, id);
+        }
+        if (value == 0 && contentPage > 1) {
+            var t = --contentPage;
+            getContent(t, id);
+        }
+    }
+    //获得侧边栏列表
+    function getHotContent() {
+        $.ajax({
+            type: 'get',
+            url: 'content.action',
+            data: {
+                'type': 'get',
+                'categoryid': '8',
+                'page': 1,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#ce-question-list').empty();
+                    $.each(result.data, function(n, value) {
+                        $('#ce-question-list').append('<div class="hot-tip-list-li row"><a href="question.html?id=' + value.id + '"><div class="li-img col-xs-2"><img src="images/logo.jpg" width="40px" height="40px"></div><div class="li-centent col-xs-10"><span title="' + value.title + '">' + value.title.substr(0, 10) + '</span></div></a></div>').trigger("create");
+                    })
+                }
+            }
+        })
+    }
+
+    //获取问题列表
+    function getContent(page, categoryid) {
+        $.ajax({
+            type: 'get',
+            url: 'content.action',
+            data: {
+                'type': 'get',
+                'categoryid': categoryid,
+                'page': page,
+            },
+            dataType: 'json',
+            success: function(result) {
+
+                if (result.success == "true") {
+                    if (result.info == page) {
+                        $('#nextPage').removeAttr("onclick");
+                        $('#articleList').append('<div>这是最后一页</div>')
+                    } else {
+                        $('#upPage').attr('onclick', 'nextPage(0,' + categoryid + ')');
+                        $('#nextPage').attr('onclick', 'nextPage(1,' + categoryid + ')');
+                    }
+
+                    $('#articleList').empty();
+                    $.each(result.data, function(n, value) {
+                        $('#articleList').append('<div class="aw-explore-list"><div class="aw-commit-list row"><div class="list-image col-sm-1"><a href="#"><img src="images/logo.jpg" width="50px" height="50px"></a></div><div class="list-content col-sm-9"><h5><a href="question.html?id=' + value.id + '">' + value.title + '</a></h5><span><i>' + value.comment_time + '</i>&nbsp;&nbsp;&nbsp;&nbsp;<i>' + value.comment_count + '</i>个回复</span></div><div class="list-replay col-sm-2"><a href="question.html?id=' + value.id + '">回复</a></div></div></div>').trigger("create");
+                    })
+                }
+            }
+
+        })
+    }
+
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+
+    $('#buttonQusetion').click(function() {
+        if ($.cookie('user_id') == null) {
+            alert("请先登录！");
+            window.location.href = "login.html";
+        } else {
+            $.ajax({
+                type: 'post',
+                url: 'content.action',
+                data: {
+                    'type': 'create',
+                    'title': $('#questionTitle').val(),
+                    'text': $('#questionText').val(),
+                    'categoryid': '10',
+                },
+                datType: 'json',
+                success: function(result) {
+                    if (result.success == "true") {
+                        $('#questionTitle').val("");
+                        $('#questionText').val("");
+                        getContent(1, 10);
+                    } else {
+                        alert(result.info);
+                    }
+                }
+            })
+        }
+    })
+    </script>
 </body>
 
 </html>

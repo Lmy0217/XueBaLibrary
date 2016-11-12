@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>学霸文库</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/forum.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- 导航 -->
+    <nav class="forum_head_nav aw-user-nav">
+        <div class="aw-logo"><a href="index.html">学霸文库</a></div>
+        <div class="aw-user-top">
+            <span>个人中心</span>
+        </div>
+        <div class="log-out">
+            <a href="user.html"><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
+        </div>
+        <div class="clear"></div>
+    </nav>
+    <!-- end 导航 -->
+    <div class="container aw-user-content">
+        <div class="top-nav">
+            <h3>个人中心</h3>
+        </div>
+        <div class="aw-user-head">
+            <div class="aw-user-headL">
+                <img src="images/avatar-mid-img.png" height="150px" width="130px">
+            </div>
+            <div class="aw-user-headR">
+                <div id="user-info">
+                    <!-- <dl class="dl-horizontal">
+                        <dt>用户名：</dt>
+                        <dd>张三</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>积分：</dt>
+                        <dd>3000</dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>修改密码：</dt>
+                        <dd><a href="javascript:;" onclick="hidePasswordBox()">修改</a></dd>
+                    </dl> -->
+                </div>
+                <div id="fixPassword">
+                    <dl class="dl-horizontal">
+                        <dt>原密码：</dt>
+                        <dd>
+                            <input class="form-control" type="password" />
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>新密码：</dt>
+                        <dd>
+                            <input class="form-control" type="password" />
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>确认新密码：</dt>
+                        <dd>
+                            <input class="form-control" type="password" />
+                        </dd>
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt></dt>
+                        <dd>
+                            <input type="button" class="btn btn-primary" value="确定修改" />
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="user-content">
+            <div class="top-nav">
+                <h3>我的帖子</h3>
+            </div>
+            <div class="user-content-text">
+                <div class="user-no-contetn" style="text-align: center;padding-top: 50px;display:none;">
+                    <h4>暂无帖子，<a href="forum.html" title="">前去发帖</a></h4>
+                </div>
+                <div class="aw-explore-list">
+                    <div class="aw-commit-list row">
+                        <div class="list-image col-sm-1">
+                            <img src="images/logo.jpg" width="50px" height="50px">
+                        </div>
+                        <div class="list-content col-sm-9">
+                            <h5><a href="#">中文完整版是集成了邮件服务吗？</a></h5>
+                            <span><i>2</i>人关注•<i>3</i>个回复•<i>200</i>次浏览</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-content">
+            <div class="top-nav">
+                <h3>我的文件</h3>
+            </div>
+            <div class="user-content-text">
+                <div class="user-no-contetn" style="text-align: center;padding-top: 50px;display:none;">
+                    <h4>暂无文件，<a href="upload.html" title="">前去上传</a></h4>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>类型</th>
+                            <th>文档名称</th>
+                            <th>上传者</th>
+                            <th>下载量</th>
+                            <th>下载积分</th>
+                            <th>上传时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyList">
+                        <tr>
+                            <td>PDF</td>
+                            <td><a href="#" title="《强制保险条例》应该遵循哪些原则">《强制保险条例》应该遵循哪些原则</a></td>
+                            <td>君顾咨询</td>
+                            <td>1次</td>
+                            <td>10</td>
+                            <td>2016-10-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="aw-user-m">
+        </div>
+    </div>
+    <!-- start  footer-->
+    <footer class="footer">
+        <div>
+            <span>南昌大学版权所有@</span>
+        </div>
+    </footer>
+    <!-- end footer -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        if ($.cookie('user_id') != null) {
+            $('#user-log-out').show();
+            $('#user-no-log').hide();
+            $('#log-username').html($.cookie('username'));
+
+        } else {
+            $('#replayArea').append('<div style="height:100px;text-align:center;"><a href="login.html">请先登录</a></div>');
+        }
+        $.ajax({
+            type: 'get',
+            url: 'user.action',
+            data: {
+                'type': "get",
+                'id': $.cookie('user_id'),
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#user-info').append('<dl class="dl-horizontal"><dt>用户名：</dt><dd>'+result.data[0].username+'</dd></dl><dl class="dl-horizontal"><dt>积分：</dt><dd>'+result.data[0].point+'</dd></dl><dl class="dl-horizontal"><dt>修改密码：</dt><dd><a href="javascript:;" onclick="hidePasswordBox()">修改</a></dd></dl>').trigger("create");
+                }
+            }
+        })
+    })
+
+    function hidePasswordBox() {
+        $('#fixPassword').toggle();
+    }
+
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+    </script>
+</body>
+
+</html>

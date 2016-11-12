@@ -1,0 +1,257 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>后台管理系统</title>
+  <meta name="description" content="这是一个 index 页面">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+  <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/amazeui.min.js"></script>
+	<script type="text/javascript" src="assets/js/popwin.js"></script>
+  <script src="assets/js/admin.js"></script>
+</head>
+<body>
+
+<header class="am-topbar am-topbar-inverse admin-header">
+  <div class="am-topbar-brand">
+    <strong>学霸文库</strong> <small>后台管理系统</small>
+  </div>
+
+  <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+    <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+		<li><a href="javascript:void(0)" class="adminloginout"><span style="color:red" class="am-icon-power-off"></span> 注销&nbsp </a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="am-cf admin-main">
+  <!-- sidebar start -->
+  <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+      <ul class="am-list admin-sidebar-list">
+        <li><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+        <li><a href="admin-user.html"><span class="am-icon-user"></span> 用户管理</a></li>
+        <li><a href="admin-file.html"><span class="am-icon-file"></span> 文档管理</a></li>
+        <li><a href="admin-invitation.html"><span class="am-icon-th"></span> 帖子管理</a></li>
+        <li style="background-color:#5bc0de"><a href="admin-remark.html"><span class="am-icon-pencil"></span> 评论管理</a></li>
+        <li><a href="admin-type.html"><span class="am-icon-puzzle-piece"></span> 类别管理</a></li>
+        <li><a href="javascript:void(0)" class="adminloginout"><span class="am-icon-sign-out"></span> 注销</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- sidebar end -->
+
+  <!-- content start -->
+  <div class="admin-content">
+    <div class="admin-content-body">
+      <div class="am-g">
+			<div class="am-u-sm-12 am-u-md-12">
+				<div class="am-btn-toolbar">
+					<div style="float:left;padding-top:5px;">
+					<span style="display:block;float:left;padding-top:3px;">自定义搜索：</span>
+					<select id="selectUser">
+						<option value="0">无条件</option>
+					</select>
+					</div>
+					<div style="float:left;padding-top:5px;margin-left:5px;">
+						<input type="text" class="am-input-sm" id="selectContent">
+					</div>
+					<button type="button" class="am-btn am-btn-primary am-btn-xs" style="margin-top:5px;" onclick="selectUser()">搜索</button>
+				</div>
+			</div>
+			
+        <div class="am-u-sm-12">
+          <table class="am-table am-table-bd am-table-striped admin-content-table">
+            <thead>
+            <tr>
+              <th>评论内容</th><th>所属帖子</th><th>所属评论</th><th>创建者</th><th>评论数</th><th>顶</th><th>踩</th></th><th>创建时间</th><th>管理</th>
+            </tr>
+            </thead>
+            <tbody id="typeTable">
+						<script>
+						$(document).ready(function(){
+							typelist(1);
+							$("#prePage").addClass("am-disabled");
+						});
+						function selectUser(){
+							typelist(1);
+							$("#prePage").addClass("am-disabled");
+						}
+						var page = 1;
+						function nextPage(){
+							page++;
+							typelist(page);
+							$("#prePage").removeClass("am-disabled");
+							$('#pageNow').html(page);
+						}
+						function prePage(){
+							page--;
+							typelist(page);
+							if(page <= 1){
+								$("#prePage").addClass("am-disabled");
+							}else{
+								$("#prePage").removeClass("am-disabled");
+							}
+							$('#pageNow').html(page);
+						}
+						function typelist(page){
+							var data = new Object();
+								data["type"] = "select";
+								data["page"] = page;
+								if($("#selectUser").val() == 1){
+									data["text"] = $.trim($("#selectContent").val());
+								}
+								var url = 'comment.action';
+								$.ajax({
+										url: url,
+										type: "GET",
+										data:data,
+										success: function (result) {
+											if(result.success == "true"){
+												if(result.info <= page){
+													$("#nextPage").addClass("am-disabled");
+												}else{
+													$("#nextPage").removeClass("am-disabled");
+												}
+												$('#pageCount').html(result.info);
+												$('#typeTable').html("");
+												$.each(result.data,function(n,value){
+													var userStatus = "不正常";
+													if(value.status == "normal"){
+														userStatus = "正常";
+													}else if(value.status == "uncheck"){
+														userStatus = "未核对";
+													}
+													$('#typeTable').append('<tr><td><div style="width:200px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+value.text+'</div></td><td><div id="content'+value.id+'" style="width:150px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div></td><td><div id="parentComment'+value.id+'" style="width:150px; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div></td><td id="username'+value.id+'"></td><td>'+value.comment_count+'</td><td>'+value.vote_up+'</td><td>'+value.vote_down+'</td><td>'+value.created+'</td>  <td><a  href="javascript:void(0)" style="color:#0b6fa2" data-am-modal="{target: \'#doc-modal-addd'+value.id+'\', closeViaDimmer: 0, width: 400, height: 520}">&nbsp详情&nbsp</a><div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-addd'+value.id+'"><div class="am-modal-dialog"><div class="am-modal-hd">查看评论详情<a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a></div><div class="am-modal-bd"><div class="am-g am-margin-top"><div class="am-u-md-4 am-text-right">ID：</div><div class="am-u-md-8 am-text-left">'+value.id+'</div></div><div class="am-g am-margin-top"><div class="am-u-md-4 am-text-right">排序：</div><div class="am-u-md-8 am-text-left"><textarea style="height:150px;">'+value.order_number+'</textarea></div></div><div class="am-g am-margin-top"><div class="am-u-md-4 am-text-right">内容：</div><div class="am-u-md-8 am-text-left"><textarea style="height:150px;">'+value.text+'</textarea></div></div><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /><button type="button" class="am-btn am-btn-default" data-am-modal-close>关闭详情</button></div></div></div><a href="javascript:void(0)" style="color:#0b6fa2" onclick="deleteInv('+value.id+')">&nbsp删除&nbsp</a></td> </tr>').trigger("create");
+													$.ajax({
+														url: "content.action",
+														type: "GET",
+														data:{type: "get", id: value.grandparent_id},
+														success: function (result) {
+															$('#content'+value.id+'').text(result.data[0].title);
+														}
+													});
+													if(value.parent_id % 2 ==0){
+														$.ajax({
+															url: "comment.action",
+															type: "GET",
+															data:{type: "get", id: value.parent_id},
+															success: function (result) {
+																$('#parentComment'+value.id+'').text(result.data[0].text);
+															}
+														});
+													}else{
+														$.ajax({
+															url: "content.action",
+															type: "GET",
+															data:{type: "get", id: value.parent_id},
+															success: function (result) {
+																$('#parentComment'+value.id+'').text(result.data[0].title);
+															}
+														});
+													}
+													
+													$.ajax({
+														url: "user.action",
+														type: "GET",
+														data:{type: "get", id: value.user_id},
+														success: function (result) {
+															$('#username'+value.id+'').text(result.data[0].username);
+														}
+													});
+												});
+												}else{
+													alert(result.info);
+											}
+										},
+										error:function (result){
+										alert("页数已超出最大范围，请返回上一页!");
+													$("#nextPage").addClass("am-disabled");
+										},
+								});
+								
+								
+						}
+						$("#selectType").change(function(){
+							sessionStorage.setItem("categoryType", $(this).val());
+							window.location.reload();
+						})
+						
+						function deleteInv(id){
+							if(confirm("确定要删除吗？")){
+										var url = 'comment.action';
+										$.ajax({
+													url: url,
+													type: "GET",
+													data: { type: "delete",id:id },
+													success: function (result) {
+														if(result.success == "true"){
+																alert("删除成功！");
+																window.location.reload();
+															}else{
+																alert(result.info);
+														}
+													},
+													error:function (result){
+													},
+											});
+							}
+						};
+						
+						
+						</script>
+						
+
+            </tbody>
+          </table>
+        </div>
+				<div class="am-fr" style="width:100%;">
+					
+					<ul class="am-pagination" style="text-align:center;">
+					总页数：<span id="pageCount"></span>页&nbsp&nbsp&nbsp
+						<li id="prePage"><a href="javascript:void(0)" onclick="prePage()">上一页</a></li>
+						<li class="am-active"><a href="#" id="pageNow">1</a></li> 
+						<li id="nextPage"><a href="javascript:void(0)" onclick="nextPage()">下一页</a></li>
+					</ul>
+        </div>
+      </div>
+
+		</div>
+
+    <footer class="admin-content-footer">
+      <hr>
+      <p align="center">© 2016 XueBaLibrary.</p>
+    </footer>
+  </div>
+  <!-- content end -->
+
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="assets/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

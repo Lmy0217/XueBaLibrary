@@ -28,9 +28,13 @@
             </span>
             <!-- <i class="icon icon-search"></i> -->
         </div>
-        <div class="forum-login">
+        <div class="forum-login" id="user-no-log">
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="log-out" style="display: none;" id="user-log-out">
+            <a href="user.html" ><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
         </div>
         <div class="clear"></div>
     </nav>
@@ -48,8 +52,8 @@
                             <div class="clear"></div>
                         </div>
                         <!-- 文章列表 -->
-                        <div class="aw-explore-list">
-                            <div class="aw-qusetion">
+                        <div class="aw-explore-list" id="aw-explore-list">
+                            <!-- <div class="aw-qusetion">
                                 <div class="aw-question-content">
                                     <h2>python写了个脚本把markdown文件转成json格式批量导入博客报错</h2>
                                     <address>发起人：张三</address>
@@ -65,7 +69,7 @@
                                         <span><a href="#" title="">收藏</a></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- end文章列表 -->
                         <!-- 回复 列表-->
@@ -73,89 +77,20 @@
                             <div class="aw-nav-ask">
                                 <span><i class="glyphicon glyphicon-th-list"></i>回复</span>
                             </div>
-                            <div class="aw-replay row">
-                                <div class="aw-replay-L col-sm-1">
-                                    <img src="images/avatar-mid-img.png">
-                                </div>
-                                <div class="aw-replay-R col-sm-10">
-                                    <span class="username">ksjkdf</span>
-                                    <p>自己已经解决了，是 slug 这个字段的问题，这个slug其实就是网址栏显示的post标题，必须是英文 参考了源码： ghost\core\server\data\import\index.js 第110行开始那一段才知道的。 发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                    </p>
-                                    <div class="aw-replay-bottom">
-                                        <span><a href="#" title=""><i class="glyphicon glyphicon-thumbs-up">赞</i></a></span>
-                                        <span><a href="javascript:;" onclick="replay_show(this);" title="">回复<i class="badge">42</i></a></span>
-                                        <div class="replay-now">
-                                            <ul class="media-list">
-                                                <li class="media">
-                                                    <a href="#" class="media-left" title="">
-                                                        <img src="images/avatar-mid-img.png" alt="">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                                    </div>
-                                                </li>
-                                                <li class="media">
-                                                    <a href="#" class="media-left" title="">
-                                                        <img src="images/avatar-mid-img.png" alt="">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="replay-now-text">
-                                                <input type="text" class="form-control" placeholder="回复他">
-                                                <button type="submit" class="btn btn-default">提交</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="reList">
+                                <!-- 评论列表 -->
+
                             </div>
-                            <div class="aw-replay row">
-                                <div class="aw-replay-L col-sm-1">
-                                    <img src="images/avatar-mid-img.png">
-                                </div>
-                                <div class="aw-replay-R col-sm-10">
-                                    <span class="username">ksjkdf</span>
-                                    <p>自己已经解决了，是 slug 这个字段的问题，这个slug其实就是网址栏显示的post标题，必须是英文 参考了源码： ghost\core\server\data\import\index.js 第110行开始那一段才知道的。 发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                    </p>
-                                    <div class="aw-replay-bottom">
-                                        <span><a href="#" title=""><i class="glyphicon glyphicon-thumbs-up">赞</i></a></span>
-                                        <span><a href="javascript:;" onclick="replay_show(this);" title="">回复<i class="badge">42</i></a></span>
-                                        <div class="replay-now">
-                                            <ul class="media-list">
-                                                <li class="media">
-                                                    <a href="#" class="media-left" title="">
-                                                        <img src="images/avatar-mid-img.png" alt="">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                                    </div>
-                                                </li>
-                                                <li class="media">
-                                                    <a href="#" class="media-left" title="">
-                                                        <img src="images/avatar-mid-img.png" alt="">
-                                                    </a>
-                                                    <div class="media-body">
-                                                        <h6>ksj</h6> 第110行开始那一段才知道的。发现这个Ghost社区极其冷清啊，超越wp任重道远。。。
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="replay-now-text">
-                                                <input type="text" class="form-control" placeholder="回复他">
-                                                <button type="submit" class="btn btn-default">提交</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div id="isLastPage" style="text-align: center;display: none;">
+                                <p>已经是最后一页了</p>
                             </div>
                         </div>
                         <!-- end回复 列表-->
                         <!-- 分页 -->
                         <nav>
                             <ul class="pager">
-                                <li><a href="#">上一页</a></li>
-                                <li><a href="#">下一页</a></li>
+                                <li><a href="javascript:;" id="upPage">上一页</a></li>
+                                <li><a href="javascript:;" id="nextPage">下一页</a></li>
                             </ul>
                         </nav>
                         <!-- end分页 -->
@@ -163,9 +98,11 @@
                             <div class="aw-nav">
                                 <span><i class="glyphicon glyphicon-th-list"></i>发表回复</span>
                             </div>
-                            <div>
-                                <textarea class="form-control" rows="6" placeholder="回复"></textarea>
-                                <button type="button" class="btn btn-primary">提交</button>
+                            <div id="replayArea">
+                                <div id="replay" style="display:none;">
+                                    <textarea class="form-control" rows="6" placeholder="回复" id="replayText"></textarea>
+                                    <button type="button" class="btn btn-primary" id="replayBtn">提交</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,7 +125,246 @@
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    //提交评论
+    $('#replayBtn').click(function() {
+            var text = $('#replayText');
+            if (text.val() == "") {
+                alert("请输入评论");
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: 'comment.action',
+                    data: {
+                        'type': 'create',
+                        'text': text.val(),
+                        'parentid': $('#listId').attr("Lid")
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.success == "true") {
+                            text.val("");
+                            getComment(1, $('#listId').attr("Lid"));
+                        } else {
+                            alert(result.info);
+                            window.location.href = result.url;
+                        }
+                    }
+                })
+            }
+        })
+        //提交评论的评论
+    function pushCComment(parentid, t) {
+        $.ajax({
+            type: 'post',
+            url: 'comment.action',
+            data: {
+                'type': 'create',
+                'text': $(t).prev().val(),
+                'parentid': parentid,
+            },
+            dataType: 'json',
+            success: function(result) {
+                if (result.success == "true") {
+                    $(t).prev().val("");
+                    getCComent(parentid);
+                } else {
+                    alert(result.info);
+                }
+            }
+
+        })
+    }
+    $(function() {
+        if ($.cookie('user_id') != null) {
+            $('#user-log-out').show();
+            $('#user-no-log').hide();
+            $("#replay").show();
+            $('#log-username').html($.cookie('username'));
+
+        } else {
+            $('#replayArea').append('<div style="height:100px;text-align:center;"><a href="login.html">请先登录</a></div>');
+        }
+
+        var strUrl = window.location.href;
+
+        //获取问题内容
+        $.ajax({
+            type: 'get',
+            url: 'content.action',
+            data: {
+                'type': 'get',
+                'id': strUrl.substring(strUrl.indexOf("=") + 1),
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    var name = getUser(result.data[0].user_id, "", 1);
+                    $('#aw-explore-list').append('<div class="aw-qusetion" id="listId" Lid="' + result.data[0].id + '"><div class="aw-question-content"><h2>' + result.data[0].title + '</h2><address id="usname' + result.data[0].user_id + '">发起人:</address><p>' + result.data[0].text + '</p></div><div class="aw-question-bot"><div class="aw-qusetion-time"><span>' + result.data[0].modified + '</span><span>回复<i>' + result.data[0].comment_count + '</i>次</span><span><a href="#" title="">收藏</a></span></div></div></div>').trigger("create");
+                } else {
+                    alert(result.info);
+                }
+            }
+        })
+
+        //获得评论
+        getComment(1, strUrl.substring(strUrl.indexOf("=") + 1));
+
+        //增加访问量
+        $.ajax({
+            type: 'post',
+            url: 'content.action',
+            data: {
+                'type': 'view',
+                'id': strUrl.substring(strUrl.indexOf("=") + 1),
+            },
+            success:function(){}
+        })
+
+    })
+
+    //分页
+    var contentPage = 1;
+
+    function nextPage(value, id) {
+        if (value == 1) {
+            var t = ++contentPage;
+            getComment(t, id);
+        }
+        if (value == 0 && contentPage > 1) {
+            var t = --contentPage;
+            getComment(t, id);
+        }
+    }
+    //获取评论的评论
+    function getCComent(parentid) {
+        $.ajax({
+            type: 'get',
+            url: 'comment.action',
+            data: {
+                'type': 'get',
+                'parentid': parentid
+            },
+            dataType: 'json',
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#commentUl' + parentid).empty();
+                    $.each(result.data, function(n, value) {
+                        $('#commentUl' + parentid).append('<li class="media"><a href="#" class="media-left" title=""><img src="images/avatar-mid-img.png" alt=""></a><div class="media-body"><h6 id="CCommentUse' + value.id + '"></h6>' + value.text + '</div></li>').trigger("create");
+                        getUser(value.user_id,value.id,3);
+                    })
+                }
+            }
+        })
+    }
+
+    //获取评论function
+    function getComment(page, parentid) {
+        $.ajax({
+            type: 'get',
+            url: 'comment.action',
+            data: {
+                'type': 'get',
+                'parentid': parentid,
+                page:page
+            },
+            dataType: 'json',
+            success: function(result) {
+                if (result.info == page) {
+                    $('#nextPage').removeAttr("onclick");
+                    $('#isLastPage').show();
+                } else {
+                    $('#upPage').attr('onclick', 'nextPage(0,' + parentid + ')');
+                    $('#nextPage').attr('onclick', 'nextPage(1,' + parentid + ')');
+
+                }
+                if (result.success == "true") {
+                    $('#isLastPage').hide();
+                    $('#reList').empty();
+                    $.each(result.data, function(n, value) {
+                        getUser(value.user_id, value.id, 2);
+
+                        $('#reList').append('<div class="aw-replay row"><div class="aw-replay-L col-sm-1"><img src="images/avatar-mid-img.png"></div><div class="aw-replay-R col-sm-10"><span class="username" id="commentUserId' + value.user_id + value.id + '"></span><p>' + value.text + '</p><div class="aw-replay-bottom"><span>第'+(parseInt(n)+1)+'楼</span><span ><a href="javascript:;" id="voteup'+value.id+'" onclick="likeComment('+value.id+',1)" title="喜欢"><i class="glyphicon glyphicon-thumbs-up"  >顶</i><i class="badge">' + value.vote_up + '</i></a></span><span><a href="javascript:;" id="votedown'+value.id+'" title="不喜欢" onclick="likeComment('+value.id+',2)"><i class="glyphicon glyphicon-thumbs-down"  >踩</i><i class="badge">' + value.vote_down + '</i></a></span><span><a href="javascript:;" onclick="replay_show(this);" title="">回复<i class="badge">' + value.comment_count + '</i></a></span><div class="replay-now"><ul class="media-list" id="commentUl' + value.id + '"></ul><div class="replay-now-text"><input type="text" class="form-control" placeholder="回复他"><button type="submit" class="btn btn-default" onclick="pushCComment(' + value.id + ',this)">提交</button></div></div></div></div></div>').trigger("create");
+                        getCComent(value.id);
+                    })
+                }
+            }
+        })
+    }
+    //评论好恶
+    function likeComment(id,vote){
+        var data={};
+        var v;
+        if (vote==1) {
+            data["type"]="voteup";
+            v="voteup";
+        }else if(vote==2){
+            data["type"]="votedown";
+            v="votedown";
+        }
+        data["id"]=id
+        
+        $.ajax({
+            type: 'get',
+            url: 'comment.action',
+            data: data,
+            success:function(result){
+                if (result.success=="true") {
+                    $('#'+v+id).css('color','red');
+                    $('#voteup'+id).removeAttr("onclick");
+                    var i=$('#'+v+id).children("i").last();
+                    i.html(parseInt(i.text())+1);
+                    $('#votedown'+id).removeAttr("onclick");
+                }else{
+                    alert(result.info);
+                    window.location.href=result.url;
+                }
+            }
+        })
+    }
+
+    //获取用户名
+    function getUser(id, commentId, type) {
+        $.ajax({
+            type: 'get',
+            url: 'user.action',
+            data: {
+                'type': 'get',
+                'id': id,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    if (type == 1) {
+                        $('#usname' + id).append(result.data[0].username);
+                    } else if (type == 2) {
+                        $('#commentUserId' + id + commentId).append(result.data[0].username);
+                    } else if (type == 3) {
+                        $('#CCommentUse' + commentId).empty().append(result.data[0].username);
+                    }
+                }
+            }
+        })
+    }
+
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+    </script>
 </body>
 
 </html>

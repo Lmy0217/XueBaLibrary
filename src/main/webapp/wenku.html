@@ -28,9 +28,13 @@
             </span>
             <!-- <i class="icon icon-search"></i> -->
         </div>
-        <div class="forum-login">
+        <div class="forum-login" id="user-no-log">
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
+        </div>
+        <div class="log-out" style="display: none;" id="user-log-out">
+            <a href="user.html" ><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
         </div>
         <div class="clear"></div>
     </nav>
@@ -41,14 +45,11 @@
                 <!-- 侧边栏导航栏 -->
                 <div class="col-sm-3  aw-main-content aw-wenku">
                     <div class="aw-wrap-upload">
-                        <a href="#" title=""></a>
+                        <a href="upload.html" title="上传我的文档"></a>
                     </div>
                     <div class="aw-warp-classify">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item " title="人文社科">人文社科&nbsp;>></a>
-                            <a href="#" class="list-group-item " title="经管销售">经管销售&nbsp;>></a>
-                            <a href="#" class="list-group-item " title="IT">IT&nbsp;>></a>
-                            <a href="#" class="list-group-item " title="自然科学">自然科&nbsp;>></a>
+                        <div class="list-group" id="categoryList">
+                            <!-- <a href="#" class="list-group-item " title="人文社科">人文社科&nbsp;>></a> -->
                         </div>
                     </div>
                 </div>
@@ -60,7 +61,7 @@
                             <h3>学霸资料</h3>
                         </div>
                     </div>
-                    <div class="hot-tip-list">
+                    <div class="hot-tip-list" style="min-height: 335px;">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -72,37 +73,28 @@
                                     <th>上传时间</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="tbodyList">
+                                <!-- <tr>
                                     <td>PDF</td>
                                     <td><a href="#" title="《强制保险条例》应该遵循哪些原则">《强制保险条例》应该遵循哪些原则</a></td>
                                     <td>君顾咨询</td>
                                     <td>1次</td>
                                     <td>10</td>
                                     <td>2016-10-10</td>
-                                </tr>
-                                <tr>
-                                    <td>PDF</td>
-                                    <td><a href="#" title="《强制保险条例》应该遵循哪些原则">《强制保险条例》应该遵循哪些原则</a></td>
-                                    <td>君顾咨询</td>
-                                    <td>1次</td>
-                                    <td>10</td>
-                                    <td>2016-10-10</td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
                     <!-- 分页 -->
-                        <nav>
-                            <ul class="pager">
-                                <li><a href="#">上一页</a></li>
-                                <li><a href="#">下一页</a></li>
-                            </ul>
-                        </nav>
-                        <!-- end分页 -->
+                    <nav>
+                        <ul class="pager">
+                            <li><a href="javascript:;" id="upPage">上一页</a></li>
+                            <li><a href="javascript:;" id="nextPage">下一页</a></li>
+                        </ul>
+                    </nav>
+                    <!-- end分页 -->
                 </div>
                 <!-- end右边栏 -->
-
             </div>
         </div>
     </div>
@@ -115,7 +107,130 @@
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+            if ($.cookie('user_id') != null) {
+                $('#user-log-out').show();
+                $('#user-no-log').hide();
+                $("#askQuestion").show();
+                $('#log-username').html($.cookie('username'));
+            } else {
+                $('#aw-ask').append('<div style="height:100px;text-align:center;"><a href="login.heml">请先登录</a></div>');
+            }
+            //获取文档类型
+            getDocumentCategory(1);
+            //获取内容列表
+            getTableList(3,1);
+        })
+        //获取文档类型
+    function getDocumentCategory(id) {
+        $.ajax({
+            type: 'get',
+            url: 'category.action',
+            data: {
+                'type': 'get',
+                'parentid': id
+            },
+            dataType: 'json',
+            success: function(result) {
+                $.each(result.data, function(n, value) {
+                    if (result.success == "true") {
+                        $('#categoryList').append('<a href="javascript:;" class="list-group-item " onclick="leftBarF(' + value.id + ')">' + value.name + '&nbsp;>></a>');
+
+                    }
+                })
+            }
+        })
+    }
+    var contentPage = 1;
+    //左边框切换
+    function leftBarF(id) {
+        contentPage=1;
+        getTableList(id,1);
+    }
+    //分页
+    
+
+    function nextPage(value, id) {
+        if (value == 1) {
+            var t = ++contentPage;
+            getTableList(t, id);
+        }
+        if (value == 0 && contentPage > 1) {
+            var t = --contentPage;
+            getTableList(t, id);
+        }
+    }
+//最后一页
+function lastPage(){
+    alert("已经是最后一页了");
+}
+    //获取内容列表
+    function getTableList(id,page) {
+        $.ajax({
+            type: 'get',
+            url: 'document.action',
+            data: {
+                'type': 'get',
+                'categoryid': id,
+                'page':page
+            },
+            dataType: 'json',
+            success: function(result) {
+                if (result.success == "true") {
+                    if (result.info == page) {
+                        $('#nextPage').attr("onclick","lastPage()");
+                    } else {
+                        $('#upPage').attr('onclick', 'nextPage(0,' + id + ')');
+                        $('#nextPage').attr('onclick', 'nextPage(1,' + id + ')');
+                    }
+                    $('#tbodyList').empty();
+                    $.each(result.data, function(n, value) {
+                        getUser(value.user_id, value.id);
+                        $('#tbodyList').append('<tr><td>PDF</td><td><a href="view.html?id=' + value.id + '" title="' + value.title + '">' + value.title + '</a></td><td id="username' + value.id + '"></td><td>' + value.rate_count + '次</td><td>' + value.price + '</td><td>' + value.modified + '</td></tr>').trigger("create");
+                    })
+                }
+
+            }
+        })
+    }
+    //获取用户名
+    function getUser(userId, id) {
+        $.ajax({
+            type: 'get',
+            url: 'user.action',
+            data: {
+                'type': 'get',
+                'id': userId,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#username' + id).html(result.data[0].username);
+                }
+            }
+        })
+    }
+    //登出
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+    </script>
 </body>
 
 </html>

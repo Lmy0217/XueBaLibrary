@@ -15,6 +15,11 @@
       <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style type="text/css" media="screen">
+    html {
+        height: auto;
+    }
+    </style>
 </head>
 
 <body>
@@ -28,10 +33,10 @@
                     <!-- end logo -->
                 </div>
                 <div class="col-sm-offset-1 col-sm-5 form-group">
-                    <input type="text" class="form-control opacity" placeholder="请输入搜索内容">
+                    <input type="text" class="form-control opacity" placeholder="请输入搜索内容" id="searchText">
                 </div>
                 <div class="col-sm-1">
-                    <button type="button" class="btn btn-primary">学霸一下</button>
+                    <button type="button" class="btn btn-primary" id="global_search_btns">学霸一下</button>
                 </div>
             </div>
         </div>
@@ -40,17 +45,21 @@
     <!-- start navigation -->
     <nav class=" header_bar">
         <div id="navbar" class="row">
-            <div class="col-sm-offset-4 col-sm-6 col-xs-12">
+            <div class="col-sm-offset-3 col-sm-6 col-xs-12">
                 <ul class="nav navbar-nav navbar-collapse">
                     <li class=" col-xs-4 active"><a href="#" title="首页">首页</a></li>
-                    <li class=" col-xs-4"><a href="#" title="资料">资料</a></li>
+                    <li class=" col-xs-4"><a href="wenku.html" title="资料">资料</a></li>
                     <!-- <li class=" col-xs-3"><a href="#" title="上传">上传</a></li> -->
                     <li class=" col-xs-4"><a href="forum.html" title="论坛">论坛</a></li>
                 </ul>
             </div>
-            <div class="col-sm-2 col-xs-12 row">
+            <div class="col-sm-2 col-xs-12 row" id="user-no-log">
                 <button class="col-sm-5 btn btn-primary" onclick="window.location.href='login.html'">登录</button>
-                <button class="col-sm-5 col-sm-offset-1 btn btn-info" onclick="window.location.href='/register'">注册</button>
+                <button class="col-sm-5 col-sm-offset-1 btn btn-info" onclick="window.location.href='register.html'">注册</button>
+            </div>
+            <div class="col-sm-2 col-xs-12 user-log-out" id="user-log-out" style="display: none;">
+                <a href="user.html"><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+                <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
             </div>
         </div>
     </nav>
@@ -58,16 +67,18 @@
     <!-- start body -->
     <section class="content_area">
         <div class="datum">
-            <article class="art">
+            <div id="documentArt">
+                <!-- <article class="art">
                 <div class="art_head">
                     <h2>Ghost 桌面版 APP 正式发布，能同时管理多个 Ghost 博客</h2>
                     <span>作者：<i>王赛</i> ~2016年4月4日</span>
                     <p>虽然通过浏览器管理 Ghost 博客虽然很方便，但是在多个 tab 之间切换有时候也会很麻烦，嗯，如果能有一个独立的 app 应该使用起来会更爽一些！ 今天的主角来了，Ghost 桌面版 APP -- Ghost Desktop！ 目前，Ghost Desktop 还处于早期阶段</p>
                     <button type="button" class="btn btn-primary"> 阅读全文</button>
                 </div>
-            </article>
+            </article> -->
+            </div>
             <div class="more art">
-            	<a href="#">查看更多</a>
+                <a href="javascript:;" id="moreDoc" onclick="findMore()">查看更多</a>
             </div>
         </div>
         <div class="right_bar">
@@ -81,13 +92,10 @@
             </div>
             <div class="Rbar">
                 <h4>热门话题</h4>
-                <div class="list-group">
-                    <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
-                    <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
-                    <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
-                    <a href="#" class="list-group-item " title="LiBAE部署node.js ghost博客系统nk">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
-                    <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
-                    <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
+                <div class="list-group" id="listGroup">
+                    <!-- //侧边栏热门话题 -->
+                    <!-- <a href="#" class="list-group-item " title="BAE部署node.js ghost博客系统">BAE部署node.js ghost博客系统&nbsp;&nbsp;&nbsp;>></a>
+                     -->
                 </div>
             </div>
         </div>
@@ -96,14 +104,158 @@
     <!-- end body -->
     <!-- start  footer-->
     <footer class="footer">
-    	<div>
-    		<span>南昌大学版权所有@</span>
-    	</div>
+        <div>
+            <span>南昌大学版权所有@</span>
+        </div>
     </footer>
     <!-- end footer -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    var moreDocument = 1;
+    //搜索
+    $("#global_search_btns").click(function() {
+        if ($("#searchText").val() != "") {
+            moreDocument = 1;
+            $('#documentArt').empty();
+            getDocument(1, $.trim($("#searchText").val()));
+        }
+    })
+    $(function() {
+            var username;
+            var userId;
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + (20 * 60 * 1000));
+            $.ajax({
+                    type: 'get',
+                    url: 'user.action',
+                    data: {
+                        'type': 'select',
+                        'email': $.cookie('user_email')
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.success == "true") {
+                            username = result.data[0].username;
+                            userId = result.data[0].id;
+                            $.cookie('username', username, {
+                                expiresAt: expireDate
+                            });
+                            $.cookie('user_id', userId, {
+                                expiresAt: expireDate
+                            });
+                            $('#user-log-out').show();
+                            $('#user-no-log').hide();
+                            $('#log-username').html(username);
+                        } else {}
+                    }
+                })
+                //获取侧边栏的热门话题
+            getHotContent();
+            //获取文档内容
+            getDocument(1, "");
+
+        })
+        //获取更多文档
+    
+
+    function findMore() {
+        moreDocument++;
+        getDocument(moreDocument, "");
+    }
+    //最后一页
+    function lastPage() {
+        alert("已经是最后一页了！");
+    }
+
+    //获取文档内容
+    function getDocument(t, title) {
+        var data = {};
+        data["type"] = "get";
+        data["page"] = t;
+        if (title != "") {
+            data["title"] = title;
+        } else {
+            data["categoryid"] = 3;
+        }
+        $.ajax({
+            type: 'get',
+            url: 'document.action',
+            data: data,
+            success: function(result) {
+                if (result.success == "true") {
+                    if (result.info == t) {
+                        $('#moreDoc').attr("onclick", "lastPage()");
+                    } else {
+                        $('#moreDoc').attr("onclick", "findMore()");
+                    }
+                    $.each(result.data, function(n, value) {
+                        getUser(value.user_id, value.id);
+                        $('#documentArt').append('<article class="art"><div class="art_head"><h2>' + value.title + '</h2><span>作者：<i id="username' + value.id + '"></i>&nbsp&nbsp&nbsp 时间：' + value.modified + '</span><p>' + value.summary + '</p><a href="view.html?id=' + value.id + '" class="btn btn-primary"> 阅读全文</a></div></article>').trigger("create");
+                    })
+                }
+            }
+        })
+    }
+
+    //获取用户名
+    function getUser(userId, id) {
+        $.ajax({
+            type: 'get',
+            url: 'user.action',
+            data: {
+                'type': 'get',
+                'id': userId,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#username' + id).html(result.data[0].username);
+                }
+            }
+        })
+    }
+    //侧边栏
+    function getHotContent() {
+        $.ajax({
+            type: 'get',
+            url: 'content.action',
+            data: {
+                'type': 'get',
+                'categoryid': '8',
+                'page': 1,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#listGroup').empty();
+                    $.each(result.data, function(n, value) {
+                        $('#listGroup').append('<a href="question.html?id=' + value.id + '" class="list-group-item " title="' + value.title + '">' + value.title.substr(0, 10) + '>></a>').trigger("create");
+                    })
+                }
+            }
+        })
+    }
+
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
+    </script>
 </body>
 
 </html>
