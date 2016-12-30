@@ -39,10 +39,10 @@ public class BaseDAO<T, PK extends Serializable> {
 			result = s.createSQLQuery(sql).executeUpdate();
 			s.getTransaction().commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			result = -1;
 			if (s != null)
 				s.getTransaction().rollback();
-			e.printStackTrace();
 		}
 
 		return result;
@@ -60,10 +60,10 @@ public class BaseDAO<T, PK extends Serializable> {
 			list = s.createSQLQuery(sql).addEntity(entityClass).list();
 			s.getTransaction().commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			list = null;
 			if (s != null)
 				s.getTransaction().rollback();
-			e.printStackTrace();
 		}
 
 		return list;
@@ -81,10 +81,10 @@ public class BaseDAO<T, PK extends Serializable> {
 			list = s.createSQLQuery(sql).list();
 			s.getTransaction().commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			list = null;
 			if (s != null)
 				s.getTransaction().rollback();
-			e.printStackTrace();
 		}
 
 		return list;
