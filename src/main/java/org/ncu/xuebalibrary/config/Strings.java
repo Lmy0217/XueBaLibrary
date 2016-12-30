@@ -3,7 +3,7 @@ package org.ncu.xuebalibrary.config;
 public class Strings {
 	
 	public static final String PROJECT_NAME = "XueBaLibrary";
-	public static final String PROJECT_URL = "http://webapps.myluo.cn/XueBaLibrary/";
+	public static final String PROJECT_URL = "https://webapps.myluo.cn/XueBaLibrary/";
 	
 	public static final String LIB_SWFTOOLS = "/usr/local/swftools/bin/pdf2swf";
 	
