@@ -14,6 +14,10 @@
 		<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
     <script type="text/javascript" src="js/jquery.cookie.js"></script>
 		<script type="text/javascript"> 
+		
+			var userid;
+				var userpoint;
+				var userrole;
 		$(function() {
 		if ($.cookie('user_id') != null) {
             $('#user-log-out').show();
@@ -21,12 +25,12 @@
             $("#replay").show();
             $('#log-username').html($.cookie('username'));
 
-        } else {
+        }else {
             $('#replayArea').append('<div style="height:100px;text-align:center;"><a href="login.html">请先登录</a></div>');
         }
 		var strUrl=window.location.href;
 		$.ajax({
-				url: document.action,
+				url: "document.action",
 				type: "GET",
 				data:{type: "get",id: strUrl.substring(strUrl.indexOf("=")+1)},
 				success: function (result) {
@@ -40,8 +44,8 @@
 								url: "user.action",
 								type: "GET",
 								data:{type: "get", id: result.data[0].user_id},
-								success: function (result) {
-									$('#username').text(result.data[0].username);
+								success: function (result2) {
+									$('#username').text(result2.data[0].username);
 								}
 							});
 						 
@@ -52,6 +56,20 @@
 				error:function (result){
 				},
 		});
+		 $.ajax({
+					url: "user.action",
+					type: "GET",
+					data:{type: "select", username: $.cookie('username')},
+					success: function (result2) {
+						if(result2.data[0].point < parseInt($("#price").html())){
+								$('#downbtn').html("积分不足,无法下载");
+								$('#downbtn').attr("disabled", true);
+						}
+						userid = result2.data[0].id;
+						userpoint = result2.data[0].point;
+						userrole = result2.data[0].role;
+					}
+				});
             <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
             var swfVersionStr = "10.0.0";
             <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
@@ -61,26 +79,26 @@
             
             var flashvars = {
                   SwfFile : escape(ret),
-				  Scale : 0.6, 
-				  ZoomTransition : "easeOut",
-				  ZoomTime : 0.5,
-  				  ZoomInterval : 0.1,
-  				  FitPageOnLoad : false,
-  				  FitWidthOnLoad : true,
-  				  PrintEnabled : true,
-  				  FullScreenAsMaxWindow : false,
-  				  ProgressiveLoading : true,
-  				  
-  				  PrintToolsVisible : true,
-  				  ViewModeToolsVisible : true,
-  				  ZoomToolsVisible : true,
-  				  FullScreenVisible : true,
-  				  NavToolsVisible : true,
-  				  CursorToolsVisible : true,
-  				  SearchToolsVisible : true,
-  				  
-  				  localeChain: "en_US"
-				  };
+									Scale : 0.6, 
+									ZoomTransition : "easeOut",
+									ZoomTime : 0.5,
+										ZoomInterval : 0.1,
+										FitPageOnLoad : false,
+										FitWidthOnLoad : true,
+										PrintEnabled : true,
+										FullScreenAsMaxWindow : false,
+										ProgressiveLoading : true,
+										
+										PrintToolsVisible : true,
+										ViewModeToolsVisible : true,
+										ZoomToolsVisible : true,
+										FullScreenVisible : true,
+										NavToolsVisible : true,
+										CursorToolsVisible : true,
+										SearchToolsVisible : true,
+										
+										localeChain: "en_US"
+									};
 				  
 			 var params = {
 				
@@ -97,8 +115,66 @@
                 "100%", "500",
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
-			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+								swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+			
+			
 			})
+				 
+				
+			function downDoc() {
+				
+				var strUrl=window.location.href;
+				window.open('download.action?documentid='+strUrl.substring(strUrl.indexOf("=")+1));
+				alert("积分扣除成功！");
+				userpoint = userpoint - parseInt($("#price").html());
+				$.ajax({
+					url: "user.action",
+					type: "GET",
+					data:{type: "update", id: userid, point: userpoint, role: userrole},
+					success: function (result2) {
+					if (result.success == "true") {
+						alert("积分扣除成功！");
+					}else{
+						alert(result.info);
+					}
+						
+					}
+				});
+    }
+     //获取用户名
+    function getUser(userId, id) {
+        $.ajax({
+            type: 'get',
+            url: 'user.action',
+            data: {
+                'type': 'get',
+                'id': userId,
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    $('#username' + id).html(result.data[0].username);
+                }
+            }
+        })
+    }
+    //登出
+    function loginOut() {
+        $.ajax({
+            type: 'post',
+            url: 'loginout.action',
+            data: {
+                'type': 'user'
+            },
+            success: function(result) {
+                if (result.success == "true") {
+                    window.location.href = result.url;
+                }
+            }
+        });
+        $.cookie('user_email', null);
+        $.cookie('username', null);
+        $.cookie('user_id', null);
+    }
         </script> 
 </head>
 
@@ -107,20 +183,21 @@
     <nav class="forum_head_nav">
         <div class="aw-logo"><a href="index.html">学霸文库</a></div>
         <div class="aw-search-box  ">
-            <input class="form-control search-query" type="text" placeholder="搜索资料">
+            <!-- <input class="form-control search-query" type="text" placeholder="搜索资料">
             <span title="搜索" id="global_search_btns">
                 <i class="glyphicon glyphicon-search"></i>
-            </span>
+            </span> -->
             <!-- <i class="icon icon-search"></i> -->
         </div>
-        <div class="forum-login">
+        <div class="forum-login" id="user-no-log">
             <a href="login.html" class="btn btn-primary">登录</a>
             <a href="register.html" class="btn btn-info">注册</a>
         </div>
-        <div class="log-out" style="display: none;">
-                <a href="" title=""><span class="glyphicon glyphicon-user">张三</span></a>
-                <a href="#" title=""><span class="glyphicon glyphicon-log-out"></span>退出</a>
+        <div class="log-out" style="display: none;" id="user-log-out">
+            <a href="user.html" ><span class="glyphicon glyphicon-user" id="log-username">张三</span></a>
+            <a href="javascript:;" onclick="loginOut()"><span class="glyphicon glyphicon-log-out"></span>退出</a>
         </div>
+        <div class="clear"></div>
         <div class="clear"></div>
     </nav>
     <!-- end 导航 -->
@@ -132,7 +209,9 @@
                     <div class="hot-tip">
                         <div>
                             <h3 id="title">学霸资料</h3>
-														<P>上传者：<span id="username" style="margin-right:10px;">lili</span>价格：<span id="price" style="margin-right:10px;">1</span><span style="float:right;margin-right:10px;">阅读量：<span id="viewcount" style="margin-right:10px;">12</span>赞：<span id="voteup" style="margin-right:10px;">2</span>踩：<span id="votedown" style="margin-right:10px;">2</span></span></P>
+														<P>上传者：<span id="username" style="margin-right:10px;">lili</span>价格：<span id="price" style="margin-right:10px;">1</span>
+														<span><button onclick="downDoc()" id="downbtn">下载此文档</button></span>
+														<span style="float:right;margin-right:10px;">阅读量：<span id="viewcount" style="margin-right:10px;">12</span>赞：<span id="voteup" style="margin-right:10px;">2</span>踩：<span id="votedown" style="margin-right:10px;">2</span></span></P>
                         </div>
                     </div>
                     

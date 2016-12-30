@@ -56,12 +56,6 @@
                 </div>
                 <div id="fixPassword">
                     <dl class="dl-horizontal">
-                        <dt>原密码：</dt>
-                        <dd>
-                            <input class="form-control" type="password" />
-                        </dd>
-                    </dl>
-                    <dl class="dl-horizontal">
                         <dt>新密码：</dt>
                         <dd>
                             <input class="form-control" type="password" />
@@ -76,7 +70,7 @@
                     <dl class="dl-horizontal">
                         <dt></dt>
                         <dd>
-                            <input type="button" class="btn btn-primary" value="确定修改" />
+                            <input type="button" class="btn btn-primary" value="确定修改" onclick="pushNewPassword()" />
                         </dd>
                     </dl>
                 </div>
@@ -164,16 +158,61 @@
             type: 'get',
             url: 'user.action',
             data: {
-                'type': "get",
+                'type': "select",
                 'id': $.cookie('user_id'),
             },
             success: function(result) {
                 if (result.success == "true") {
-                    $('#user-info').append('<dl class="dl-horizontal"><dt>用户名：</dt><dd>'+result.data[0].username+'</dd></dl><dl class="dl-horizontal"><dt>积分：</dt><dd>'+result.data[0].point+'</dd></dl><dl class="dl-horizontal"><dt>修改密码：</dt><dd><a href="javascript:;" onclick="hidePasswordBox()">修改</a></dd></dl>').trigger("create");
+                    $('#user-info').append('<dl class="dl-horizontal"><dt>用户名：</dt><dd>'+result.data[0].username+'</dd></dl><dl class="dl-horizontal"><dt>积分：</dt><dd>'+result.data[0].point+'</dd></dl><dl class="dl-horizontal"><dt></dt><dd><a href="javascript:;" class="btn btn-primary" onclick="sign()" id="sign">签到</a></dd></dl><dl class="dl-horizontal"><dt>修改密码：</dt><dd><a href="javascript:;" onclick="hidePasswordBox()">修改</a></dd></dl>').trigger("create");
                 }
             }
         })
     })
+    function sign(){
+        $.ajax({
+            type:'post',
+            url:'user.action',
+            data:{
+                'type':'sign'
+            },
+            success:function(result){
+                if(result.success=="true"){
+                    alert(result.info);
+                    location.href=location;
+                }else{
+                    alert(result.info);
+                     $("#sign").attr("disabled","true");
+                }
+            }
+        })
+    }
+    function pushNewPassword(){
+        var newP=$('#fixPassword input:eq(0)');
+        var rnewP=$('#fixPassword input:eq(1)');
+        if(newP.val()==""||oldP.val()==""||rnewP.val()==""){
+            alert("请输入密码！")
+            return;
+        }
+        if(newP.val()!=rnewP.val()){
+            alert("请确认新密码！");
+            return;
+        }
+        $.ajax({
+            type:'post',
+            url:'password.action',
+            data:{
+                'type':'reset',
+                'newpassword':$.trim(newP.val())
+            },
+            success:function(result){
+                if (result.success=="true") {
+                    alert(result.info);
+                }else{
+                    alert(result.info);
+                }
+            }
+        })
+    }
 
     function hidePasswordBox() {
         $('#fixPassword').toggle();
